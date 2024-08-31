@@ -1,0 +1,78 @@
+﻿@model Epizon.Models.RegisterRivenditoreViewModel
+
+@{
+    ViewData["Title"] = "Registrazione Rivenditore";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="RegisterRivenditore" method="post">
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="control-label"></label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="RagioneSociale" class="control-label"></label>
+        <input asp-for="RagioneSociale" class="form-control" />
+        <span asp-validation-for="RagioneSociale" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Nome" class="control-label"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Cognome" class="control-label"></label>
+        <input asp-for="Cognome" class="form-control" />
+        <span asp-validation-for="Cognome" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PartitaIva" class="control-label"></label>
+        <input asp-for="PartitaIva" class="form-control" />
+        <span asp-validation-for="PartitaIva" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Indirizzo" class="control-label"></label>
+        <input asp-for="Indirizzo" class="form-control" />
+        <span asp-validation-for="Indirizzo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Citta" class="control-label"></label>
+        <input asp-for="Citta" class="form-control" />
+        <span asp-validation-for="Citta" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CAP" class="control-label"></label>
+        <input asp-for="CAP" class="form-control" />
+        <span asp-validation-for="CAP" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Provincia" class="control-label"></label>
+        <input asp-for="Provincia" class="form-control" />
+        <span asp-validation-for="Provincia" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Telefono" class="control-label"></label>
+        <input asp-for="Telefono" class="form-control" />
+        <span asp-validation-for="Telefono" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Pec" class="control-label"></label>
+        <input asp-for="Pec" class="form-control" />
+        <span asp-validation-for="Pec" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CodiceDestinatario" class="control-label"></label>
+        <input asp-for="CodiceDestinatario" class="form-control" />
+        <span asp-validation-for="CodiceDestinatario" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Registrati</button>
+</form>
+
+<a asp-controller="Home" asp-action="Index">Torna alla home</a>
