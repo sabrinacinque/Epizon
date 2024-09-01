@@ -42,6 +42,27 @@ namespace Epizon.Controllers
             return View(await articoli.ToListAsync());
         }
 
+        // GET: Articoli/Categorie/{categoria}
+        public async Task<IActionResult> Categorie(string categoria)
+        {
+            if (string.IsNullOrEmpty(categoria))
+            {
+                return NotFound();
+            }
+
+            var articoli = await _context.Articoli
+                .Where(a => a.Categoria == categoria)
+                .ToListAsync();
+
+            if (articoli == null || articoli.Count == 0)
+            {
+                return NotFound();
+            }
+
+            ViewData["Categoria"] = categoria;
+            return View(articoli);
+        }
+
         // GET: Articoli/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -71,9 +92,18 @@ namespace Epizon.Controllers
             // Aggiunta delle categorie predefinite
             ViewData["Categorie"] = new List<SelectListItem>
             {
-                new SelectListItem { Value = "Categoria1", Text = "Categoria1" },
-                new SelectListItem { Value = "Categoria2", Text = "Categoria2" },
-                new SelectListItem { Value = "Categoria3", Text = "Categoria3" }
+                new SelectListItem { Value = "Alimentari e bevande", Text = "Alimentari e bevande" },
+                new SelectListItem { Value = "Farmacia e cura della persona", Text = "Farmacia e cura della persona" },
+                new SelectListItem { Value = "Animali domestici", Text = "Animali domestici" },
+                new SelectListItem { Value = "Moda e bellezza", Text = "Moda e bellezza" },
+                new SelectListItem { Value = "Casa", Text = "Casa" },
+                new SelectListItem { Value = "Dispositivi ed elettronica", Text = "Dispositivi ed elettronica" },
+                new SelectListItem { Value = "Musica, video e giochi", Text = "Musica, video e giochi" },
+                new SelectListItem { Value = "Libri e lettura", Text = "Libri e lettura" },
+                new SelectListItem { Value = "Giochi, bambini e prima infanzia", Text = "Giochi, bambini e prima infanzia" },
+                new SelectListItem { Value = "Auto e moto", Text = "Auto e moto" },
+                new SelectListItem { Value = "Ufficio e professionisti", Text = "Ufficio e professionisti" },
+                new SelectListItem { Value = "Sport", Text = "Sport" }
             };
 
             return View();
@@ -110,15 +140,23 @@ namespace Epizon.Controllers
 
             // Ripopolare le categorie in caso di errore
             ViewData["Categorie"] = new List<SelectListItem>
-    {
-        new SelectListItem { Value = "Categoria1", Text = "Categoria1" },
-        new SelectListItem { Value = "Categoria2", Text = "Categoria2" },
-        new SelectListItem { Value = "Categoria3", Text = "Categoria3" }
-    };
+            {
+                new SelectListItem { Value = "Alimentari e bevande", Text = "Alimentari e bevande" },
+                new SelectListItem { Value = "Farmacia e cura della persona", Text = "Farmacia e cura della persona" },
+                new SelectListItem { Value = "Animali domestici", Text = "Animali domestici" },
+                new SelectListItem { Value = "Moda e bellezza", Text = "Moda e bellezza" },
+                new SelectListItem { Value = "Casa", Text = "Casa" },
+                new SelectListItem { Value = "Dispositivi ed elettronica", Text = "Dispositivi ed elettronica" },
+                new SelectListItem { Value = "Musica, video e giochi", Text = "Musica, video e giochi" },
+                new SelectListItem { Value = "Libri e lettura", Text = "Libri e lettura" },
+                new SelectListItem { Value = "Giochi, bambini e prima infanzia", Text = "Giochi, bambini e prima infanzia" },
+                new SelectListItem { Value = "Auto e moto", Text = "Auto e moto" },
+                new SelectListItem { Value = "Ufficio e professionisti", Text = "Ufficio e professionisti" },
+                new SelectListItem { Value = "Sport", Text = "Sport" }
+            };
 
             return View(articolo);
         }
-
 
         // GET: Articoli/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -140,9 +178,18 @@ namespace Epizon.Controllers
             // Aggiunta delle categorie predefinite
             ViewData["Categorie"] = new List<SelectListItem>
             {
-                new SelectListItem { Value = "Categoria1", Text = "Categoria1" },
-                new SelectListItem { Value = "Categoria2", Text = "Categoria2" },
-                new SelectListItem { Value = "Categoria3", Text = "Categoria3" }
+                new SelectListItem { Value = "Alimentari e bevande", Text = "Alimentari e bevande" },
+                new SelectListItem { Value = "Farmacia e cura della persona", Text = "Farmacia e cura della persona" },
+                new SelectListItem { Value = "Animali domestici", Text = "Animali domestici" },
+                new SelectListItem { Value = "Moda e bellezza", Text = "Moda e bellezza" },
+                new SelectListItem { Value = "Casa", Text = "Casa" },
+                new SelectListItem { Value = "Dispositivi ed elettronica", Text = "Dispositivi ed elettronica" },
+                new SelectListItem { Value = "Musica, video e giochi", Text = "Musica, video e giochi" },
+                new SelectListItem { Value = "Libri e lettura", Text = "Libri e lettura" },
+                new SelectListItem { Value = "Giochi, bambini e prima infanzia", Text = "Giochi, bambini e prima infanzia" },
+                new SelectListItem { Value = "Auto e moto", Text = "Auto e moto" },
+                new SelectListItem { Value = "Ufficio e professionisti", Text = "Ufficio e professionisti" },
+                new SelectListItem { Value = "Sport", Text = "Sport" }
             };
 
             return View(articolo);
@@ -151,7 +198,7 @@ namespace Epizon.Controllers
         // POST: Articoli/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Titolo,Descrizione,Prezzo,TempiDiSpedizione,Categoria,OrdineId")] Articolo articolo, IFormFile ImmagineCopertina, IFormFile Immagine2, IFormFile Immagine3)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Titolo,Descrizione,Prezzo,TempiDiSpedizione,Categoria")] Articolo articolo, IFormFile ImmagineCopertina, IFormFile Immagine2, IFormFile Immagine3)
         {
             if (id != articolo.Id)
             {
@@ -162,6 +209,14 @@ namespace Epizon.Controllers
             {
                 try
                 {
+                    // Mantieni l'ID del rivenditore originale
+                    var existingArticolo = await _context.Articoli.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
+                    if (existingArticolo == null)
+                    {
+                        return NotFound();
+                    }
+                    articolo.RivenditoreId = existingArticolo.RivenditoreId;
+
                     // Salvataggio delle immagini se presenti
                     articolo.ImmagineCopertina = ImmagineCopertina != null ? await SalvaImmagine(ImmagineCopertina) : articolo.ImmagineCopertina;
                     articolo.Immagine2 = Immagine2 != null ? await SalvaImmagine(Immagine2) : articolo.Immagine2;
@@ -184,19 +239,26 @@ namespace Epizon.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["OrdineId"] = new SelectList(_context.Ordini, "Id", "Id", articolo.OrdineId);
-            ViewData["RivenditoreId"] = new SelectList(_context.Rivenditori, "Id", "Email", articolo.RivenditoreId);
-
-            // Ripopolare le categorie in caso di errore
+            // In caso di errore, ripopola le categorie
             ViewData["Categorie"] = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "Categoria1", Text = "Categoria1" },
-                new SelectListItem { Value = "Categoria2", Text = "Categoria2" },
-                new SelectListItem { Value = "Categoria3", Text = "Categoria3" }
-            };
+    {
+        new SelectListItem { Value = "Alimentari e bevande", Text = "Alimentari e bevande" },
+        new SelectListItem { Value = "Farmacia e cura della persona", Text = "Farmacia e cura della persona" },
+        new SelectListItem { Value = "Animali domestici", Text = "Animali domestici" },
+        new SelectListItem { Value = "Moda e bellezza", Text = "Moda e bellezza" },
+        new SelectListItem { Value = "Casa", Text = "Casa" },
+        new SelectListItem { Value = "Dispositivi ed elettronica", Text = "Dispositivi ed elettronica" },
+        new SelectListItem { Value = "Musica, video e giochi", Text = "Musica, video e giochi" },
+        new SelectListItem { Value = "Libri e lettura", Text = "Libri e lettura" },
+        new SelectListItem { Value = "Giochi, bambini e prima infanzia", Text = "Giochi, bambini e prima infanzia" },
+        new SelectListItem { Value = "Auto e moto", Text = "Auto e moto" },
+        new SelectListItem { Value = "Ufficio e professionisti", Text = "Ufficio e professionisti" },
+        new SelectListItem { Value = "Sport", Text = "Sport" }
+    };
 
             return View(articolo);
         }
+
 
         // GET: Articoli/Delete/5
         public async Task<IActionResult> Delete(int? id)

@@ -52,17 +52,9 @@
                 <input asp-for="Immagine3" type="file" class="form-control" />
                 <span asp-validation-for="Immagine3" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OrdineId" class="control-label"></label>
-                <select asp-for="OrdineId" class="form-control" asp-items="ViewBag.OrdineId" hidden></select>
-                <span asp-validation-for="OrdineId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RivenditoreId" class="control-label"></label>
-                <!-- Mostra l'ID del rivenditore loggato -->
-                <input asp-for="RivenditoreId" class="form-control" readonly />
-                <span asp-validation-for="RivenditoreId" class="text-danger"></span>
-            </div>
+            <!-- OrdineId e RivenditoreId sono nascosti e non accessibili -->
+            <input type="hidden" asp-for="OrdineId" />
+            <input type="hidden" asp-for="RivenditoreId" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

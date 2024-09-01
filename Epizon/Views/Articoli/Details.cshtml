@@ -10,66 +10,55 @@
     <h4>Articolo</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Titolo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Titolo)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Descrizione)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Descrizione)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Prezzo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Prezzo)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ImmagineCopertina)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImmagineCopertina)
+        <dd class="col-sm-10">
+            <img src="~/images/@Model.ImmagineCopertina" alt="Immagine Copertina" class="img-thumbnail" />
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Immagine2)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Immagine2)
+        <dd class="col-sm-10">
+            <img src="~/images/@Model.Immagine2" alt="Immagine 2" class="img-thumbnail" />
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Immagine3)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Immagine3)
+        <dd class="col-sm-10">
+            <img src="~/images/@Model.Immagine3" alt="Immagine 3" class="img-thumbnail" />
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.TempiDiSpedizione)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TempiDiSpedizione)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Categoria)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Categoria)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rivenditore)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Rivenditore.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ordine)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ordine.Id)
-        </dd>
+        <!-- Rimuovi i dettagli di Ordine e Rivenditore -->
     </dl>
 </div>
 <div>

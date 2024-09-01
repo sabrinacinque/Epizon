@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Epizon.Models.Articolo>
+
+@{
+    ViewData["Title"] = ViewData["Categoria"] + " - Articoli";
+}
+
+<h1>@ViewData["Categoria"]</h1>
+
+<div class="container">
+    <div class="row">
+        @foreach (var articolo in Model)
+        {
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <img src="~/images/@articolo.ImmagineCopertina" class="card-img-top" alt="@articolo.Titolo">
+                    <div class="card-body">
+                        <h5 class="card-title">@articolo.Titolo</h5>
+                        <p class="card-text">@articolo.Prezzo</p>
+                        <a href="@Url.Action("Details", "Articoli", new { id = articolo.Id })" class="btn btn-primary">Dettagli</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,8 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Epizon.Controllers.CategoriaViewModel>
+
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1>Che cosa vuoi comprare?</h1>
+
+<div class="container">
+    <div class="row">
+        @foreach (var categoria in Model)
+        {
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <a href="@Url.Action("Categoria", "Home", new { categoria = categoria.Nome })">
+                        <img src="~/images/@categoria.ImmagineUrl" class="card-img-top" alt="@categoria.Nome">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">@categoria.Nome</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
 </div>
