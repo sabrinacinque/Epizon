@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Epizon.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 public class CarrelloController : Controller
 {
@@ -23,7 +24,7 @@ public class CarrelloController : Controller
     public IActionResult VisualizzaCarrello()
     {
         var articoli = RecuperaCarrello();
-        var totale = articoli.Sum(a => a.Prezzo); // Calcola il totale del carrello
+        var totale = articoli.Sum(a => a.Prezzo);
 
         var carrelloViewModel = new CarrelloViewModel
         {
@@ -80,7 +81,6 @@ public class CarrelloController : Controller
     {
         if (!User.Identity.IsAuthenticated)
         {
-            // Reindirizza alla pagina di accesso e registrazione se l'utente non è autenticato
             return RedirectToAction("LoginOrRegister", "Carrello");
         }
 
@@ -106,68 +106,94 @@ public class CarrelloController : Controller
         return View(carrelloViewModel);
     }
 
-
-
-
-    [HttpGet]
-    public IActionResult LoginOrRegister()
-    {
-        return View();
-    }
-
     [HttpPost]
     public async Task<IActionResult> ConfermaOrdine()
     {
-        if (!User.Identity.IsAuthenticated)
+        try
         {
-            return RedirectToAction("Login", "Account");
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var email = User.Identity.Name;
+            var compratore = await _context.Compratori
+                                           .FirstOrDefaultAsync(c => c.Email == email);
+
+            if (compratore == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var articoli = RecuperaCarrello();
+
+            if (articoli == null || !articoli.Any())
+            {
+                return RedirectToAction("VisualizzaCarrello");
+            }
+
+            var nuovoOrdine = new Ordine
+            {
+                CompratoreId = compratore.Id,
+                DataOrdine = DateTime.Now,
+                Totale = articoli.Sum(a => a.Prezzo * a.Quantità),
+                OrdineArticoli = new List<OrdineArticolo>()
+            };
+
+            _context.Ordini.Add(nuovoOrdine);
+            await _context.SaveChangesAsync();
+
+            foreach (var articolo in articoli)
+            {
+                var ordineArticolo = new OrdineArticolo
+                {
+                    OrdineId = (int)nuovoOrdine.Id,
+                    ArticoloId = articolo.Id,
+                    Quantità = (int)articolo.Quantità
+                };
+
+                _context.OrdineArticoli.Add(ordineArticolo);
+            }
+
+            await _context.SaveChangesAsync();
+
+            HttpContext.Session.Remove("Carrello");
+
+            return RedirectToAction("OrdineConfermato", new { ordineId = nuovoOrdine.Id });
         }
-
-        var email = User.Identity.Name;
-
-        var compratore = await _context.Compratori
-                                       .FirstOrDefaultAsync(c => c.Email == email);
-
-        if (compratore == null)
+        catch (DbUpdateException dbEx)
         {
-            return RedirectToAction("Login", "Account");
+            _logger.LogError(dbEx, "Errore durante il salvataggio dell'ordine: {Message}", dbEx.Message);
+            return View("ErroreDuranteOrdine");
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Errore generale durante il salvataggio dell'ordine: {Message}", ex.Message);
+            return View("ErroreDuranteOrdine");
+        }
+    }
 
-        var articoli = RecuperaCarrello();
-        if (articoli.Count == 0)
+
+    public async Task<IActionResult> OrdineConfermato(string ordiniIds)
+    {
+        if (string.IsNullOrEmpty(ordiniIds))
         {
             return RedirectToAction("VisualizzaCarrello");
         }
 
-        var ordine = new Ordine
-        {
-            CompratoreId = compratore.Id,
-            DataOrdine = DateTime.Now,
-            Totale = articoli.Sum(a => a.Prezzo)
-        };
+        var ordiniIdsList = ordiniIds.Split(',').Select(int.Parse).ToList();
+        var ordini = await _context.Ordini
+                                   .Include(o => o.Compratore)
+                                   .Where(o => ordiniIdsList.Contains((int)o.Id))
+                                   .ToListAsync();
 
-        _context.Ordini.Add(ordine);
-
-        foreach (var articolo in articoli)
-        {
-            _context.OrdineArticoli.Add(new OrdineArticolo
-            {
-                OrdineId = ordine.Id,
-                ArticoloId = articolo.Id,
-                Quantità = 1 // Usa la quantità appropriata se disponibile
-            });
-        }
-
-        await _context.SaveChangesAsync();
-
-        // Rimuovere gli articoli dal carrello
-        HttpContext.Session.Remove("Carrello");
-
-        // Reindirizzare alla pagina di conferma
-        return RedirectToAction("ConfermaOrdine");
+        return View(ordini);
     }
 
-
-
-
+    // Puoi aggiungere un metodo per gestire errori durante l'ordine se necessario.
+    public IActionResult ErroreDuranteOrdine()
+    {
+        // Visualizza una vista di errore
+        return View();
+    }
 }

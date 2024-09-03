@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Epizon.Models.Ordine>
+
+@{
+    ViewData["Title"] = "Ordine Confermato";
+}
+
+<h2>Grazie, il tuo ordine è stato ricevuto!</h2>
+
+<p>Il tuo ordine è stato processato con successo. Ecco un riepilogo dei tuoi ordini:</p>
+
+@foreach (var ordine in Model)
+{
+    <div>
+        <h4>Ordine ID: @ordine.Id</h4>
+        <p>Data: @ordine.DataOrdine</p>
+        <p>Totale: @ordine.Totale</p>
+        <hr />
+    </div>
+}
+
+<a href="@Url.Action("Index", "Home")" class="btn btn-primary">Torna alla Home</a>
