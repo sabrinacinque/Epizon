@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Epizon.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </head>
 <body>
     <header>
@@ -26,9 +27,9 @@
                         {
                             if (User.IsInRole("Rivenditore"))
                             {
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Articoli" asp-action="Index">Articoli</a>
-                                        </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Articoli" asp-action="Index">Articoli</a>
+                                </li>
                             }
                         }
                         <li class="nav-item">
@@ -43,25 +44,28 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="RegisterCompratore">Registrati come Compratore</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("VisualizzaCarrello", "Carrello")">
+                                <i class="fas fa-shopping-cart"></i>
+                                Carrello
+                                <span id="numeroProdottiNelCarrello" class="badge bg-primary">0</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - Epizon - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - Epizon
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js"></script>
 </body>
 </html>

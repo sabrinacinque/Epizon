@@ -1,0 +1,15 @@
+﻿@model ArticoloViewModel
+
+@{
+    ViewData["Title"] = "Articolo aggiunto al carrello";
+}
+
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Articolo aggiunto al carrello!</h4>
+    <p>@Model.Titolo è stato aggiunto al tuo carrello.</p>
+    <hr>
+    <p class="mb-0">
+        <a href="@Url.Action("Index", "Shop")" class="btn btn-primary">Continua a fare shopping</a>
+        <a href="@Url.Action("Index", "Carrello")" class="btn btn-success">Visualizza il carrello</a>
+    </p>
+</div>

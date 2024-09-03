@@ -1,0 +1,49 @@
+﻿@model ArticoloViewModel
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="~/images/@Model.ImmagineCopertina" alt="@Model.Titolo" class="img-fluid">
+        </div>
+        <div class="col-md-6">
+            <h1>@Model.Titolo</h1>
+            <p class="text-muted">@Model.Prezzo €</p>
+            <form id="aggiungiForm" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="button" class="aggiungi-al-carrello" data-id="@Model.Id">Aggiungi al carrello</button>
+            </form>
+            <hr />
+            <p>@Model.Descrizione</p>
+            @if (Model.Rivenditore != null)
+            {
+                <p><strong>Rivenditore:</strong> @Model.Rivenditore.RagioneSociale</p>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".aggiungi-al-carrello").on("click", function () {
+            var prodottoId = $(this).data("id");
+
+            $.ajax({
+                url: '@Url.Action("AggiungiAlCarrello", "Carrello")',
+                type: 'POST',
+                data: { id: prodottoId },
+                success: function (response) {
+                    if (response.success) {
+                        alert("Prodotto aggiunto al carrello con successo!");
+                        $("#numeroProdottiNelCarrello").text(response.numeroProdottiNelCarrello);
+                    } else {
+                        alert("Si è verificato un errore durante l'aggiunta del prodotto al carrello.");
+                    }
+                },
+                error: function () {
+                    alert("Si è verificato un errore durante l'aggiunta del prodotto al carrello.");
+                }
+            });
+        });
+    });
+</script>

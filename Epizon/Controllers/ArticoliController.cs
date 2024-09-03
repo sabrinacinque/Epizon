@@ -315,5 +315,37 @@ namespace Epizon.Controllers
 
             return file.FileName;
         }
+
+        public async Task<IActionResult> Dettaglio(int id)
+        {
+            var articolo = await _context.Articoli
+                .Include(a => a.Rivenditore) // Assicurati che Rivenditore sia un navigational property
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (articolo == null)
+            {
+                return NotFound();
+            }
+
+            var modello = new ArticoloViewModel
+            {
+                Id = articolo.Id,
+                Titolo = articolo.Titolo,
+                Descrizione = articolo.Descrizione,
+                Prezzo = (int)articolo.Prezzo,
+                ImmagineCopertina = articolo.ImmagineCopertina,
+                Immagine2 = articolo.Immagine2,
+                Immagine3 = articolo.Immagine3,
+                TempiDiSpedizione = (int)articolo.TempiDiSpedizione,
+                Categoria = articolo.Categoria,
+                RivenditoreId = articolo.RivenditoreId,
+                Rivenditore = articolo.Rivenditore != null ? new RivenditoreViewModel
+                {
+                    RagioneSociale = articolo.Rivenditore.RagioneSociale
+                } : null
+            };
+
+            return View(modello);
+        }
     }
 }

@@ -16,6 +16,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Account/AccessDenied";
     });
 
+// Configurazione della sessione
+builder.Services.AddDistributedMemoryCache(); // Usa una cache in memoria per la sessione
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Imposta il tempo di inattività
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -31,6 +40,9 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Usa la sessione
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

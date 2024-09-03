@@ -36,6 +36,12 @@ namespace Epizon.Data
 
             modelBuilder.Entity<OrdineArticolo>()
                 .HasKey(oa => new { oa.OrdineId, oa.ArticoloId });
+
+            modelBuilder.Entity<Articolo>()
+                .HasOne(a => a.Rivenditore)
+                .WithMany(r => r.Articoli)
+                .HasForeignKey(a => a.RivenditoreId)
+                .OnDelete(DeleteBehavior.Restrict); // Imposta DeleteBehavior se necessario
         }
     }
 }
