@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Epizon.Models.ArticoloViewModel>
+﻿@model Epizon.Models.CarrelloViewModel
 
 @{
     ViewData["Title"] = "Checkout";
@@ -7,36 +7,44 @@
 <h1>Checkout</h1>
 
 <div class="row">
-    <div class="col-md-6">
-        <h3>Dettagli di Spedizione</h3>
-        <form>
-            <div class="form-group">
-                <label for="nome">Nome</label>
-                <input type="text" class="form-control" id="nome" placeholder="Inserisci il tuo nome">
-            </div>
-            <div class="form-group">
-                <label for="indirizzo">Indirizzo</label>
-                <input type="text" class="form-control" id="indirizzo" placeholder="Inserisci il tuo indirizzo">
-            </div>
-            <div class="form-group">
-                <label for="città">Città</label>
-                <input type="text" class="form-control" id="città" placeholder="Inserisci la tua città">
-            </div>
-            <!-- Altri campi per il checkout -->
-        </form>
-    </div>
-    <div class="col-md-6">
-        <h3>Riepilogo Ordine</h3>
+    <div class="col-md-8">
+        <h2>Riepilogo Ordine</h2>
         <ul class="list-group">
-            @foreach (var articolo in Model)
+            @foreach (var articolo in Model.Articoli)
             {
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     @articolo.Titolo
-                    <span>@articolo.Prezzo €</span>
+                    <span>@articolo.Prezzo.ToString("C")</span>
                 </li>
             }
         </ul>
-        <h4 class="mt-3">Totale: @Model.Sum(a => a.Prezzo) €</h4>
-        <button type="submit" class="btn btn-success mt-3">Conferma Ordine</button>
+        <h4 class="mt-3">Totale: @Model.Totale.ToString("C")</h4>
+    </div>
+
+    <div class="col-md-4">
+        <h2>Dettagli di Spedizione</h2>
+        <form asp-action="ConfermaOrdine" method="post">
+            <div class="mb-3">
+                <label class="form-label">Nome</label>
+                <input type="text" class="form-control" value="@Model.Compratore.Nome" readonly />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cognome</label>
+                <input type="text" class="form-control" value="@Model.Compratore.Cognome" readonly />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="text" class="form-control" value="@Model.Compratore.Email" readonly />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Indirizzo</label>
+                <input type="text" class="form-control" value="@Model.Compratore.Indirizzo" readonly />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Telefono</label>
+                <input type="text" class="form-control" value="@Model.Compratore.Telefono" readonly />
+            </div>
+            <button type="submit" class="btn btn-primary">Conferma Ordine</button>
+        </form>
     </div>
 </div>

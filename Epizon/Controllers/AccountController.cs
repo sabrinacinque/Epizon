@@ -2,6 +2,7 @@
 using Epizon.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
@@ -106,8 +107,8 @@ namespace Epizon.Controllers
 
                 // Hash the password before saving it
                 user.Password = HashPassword(model.Password);
-                
-                
+
+
 
                 _context.Rivenditori.Add(user);
                 await _context.SaveChangesAsync();
@@ -210,12 +211,6 @@ namespace Epizon.Controllers
         }
 
 
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
-        }
-
         private string HashPassword(string password)
         {
             // Implement a secure password hashing mechanism (e.g., using PBKDF2, bcrypt, or Argon2)
@@ -229,5 +224,32 @@ namespace Epizon.Controllers
             // Here is a simple placeholder
             return enteredPassword == storedPassword; // Replace with actual verification logic
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home"); // O qualsiasi altra pagina di redirezione
+        }
+        // Azione per visualizzare il profilo dell'utente
+        public async Task<IActionResult> Profile()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var email = User.Identity.Name;
+            var compratore = await _context.Compratori
+                                           .FirstOrDefaultAsync(c => c.Email == email);
+
+            if (compratore == null)
+            {
+                return NotFound();
+            }
+
+            return View(compratore);
+        }
+
     }
 }

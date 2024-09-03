@@ -1,10 +1,16 @@
-﻿namespace Epizon.Models
-{
-    public class CarrelloViewModel
+﻿
+    using System.Collections.Generic;
+
+    namespace Epizon.Models
     {
-        public List<ArticoloViewModel> Articoli { get; set; } = new List<ArticoloViewModel>();
-        public int QuantitàArticoli => (int)Articoli.Sum(a => a.Quantità);
+        public class CarrelloViewModel
+        {
+            public List<ArticoloViewModel> Articoli { get; set; }
+            public decimal Totale { get; set; }
+            public Compratore? Compratore { get; set; } // Aggiungi questa proprietà
+        }
     }
+
 
     public class ArticoloViewModel
     {
@@ -27,4 +33,4 @@
         public string RagioneSociale { get; set; }
     }
 
-}
+

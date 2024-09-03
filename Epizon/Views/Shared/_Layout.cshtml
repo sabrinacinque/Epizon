@@ -25,25 +25,43 @@
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            if (User.IsInRole("Rivenditore"))
+                            <li class="nav-item">
+                                
+                               Ciao, @User.Identity.Name
+                                
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">
+                                    Il mio profilo
+                                </a>
+                            </li>
+                            @if (User.IsInRole("Rivenditore"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Articoli" asp-action="Index">Articoli</a>
                                 </li>
                             }
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
+                                    <button type="submit" class="btn btn-link nav-link">Logout</button>
+                                </form>
+                            </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="LoginRivenditore">Accedi come Rivenditore</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="LoginCompratore">Accedi come Compratore</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="RegisterRivenditore">Registrati come Rivenditore</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="RegisterCompratore">Registrati come Compratore</a>
-                        </li>
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="LoginRivenditore">Accedi come Rivenditore</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="LoginCompratore">Accedi come Compratore</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="RegisterRivenditore">Registrati come Rivenditore</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="RegisterCompratore">Registrati come Compratore</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link" href="@Url.Action("VisualizzaCarrello", "Carrello")">
                                 <i class="fas fa-shopping-cart"></i>

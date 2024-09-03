@@ -42,6 +42,7 @@ namespace Epizon.Data
                 .WithMany(r => r.Articoli)
                 .HasForeignKey(a => a.RivenditoreId)
                 .OnDelete(DeleteBehavior.Restrict); // Imposta DeleteBehavior se necessario
+
         }
     }
 }
