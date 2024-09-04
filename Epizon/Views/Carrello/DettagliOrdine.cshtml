@@ -1,0 +1,32 @@
+﻿@model OrdineDettagliViewModel
+
+<h1>Dettagli Ordine</h1>
+
+<div>
+    <h4>ID Ordine: @Model.Id</h4>
+    <p>Data Ordine: @Model.DataOrdine.ToString("dd/MM/yyyy HH:mm")</p>
+    <p>Totale: @Model.Totale €</p>
+</div>
+
+<h3>Articoli dell'Ordine</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Titolo Articolo</th>
+            <th>Prezzo</th>
+            <th>Quantità</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var articolo in Model.Articoli)
+        {
+            <tr>
+                <td>@articolo.Titolo</td>
+                <td>@articolo.Prezzo €</td>
+                <td>@articolo.Quantità</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-primary" href="@Url.Action("IMieiOrdini", "Carrello")">Torna ai miei ordini</a>

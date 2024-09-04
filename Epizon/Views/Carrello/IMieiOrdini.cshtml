@@ -1,0 +1,27 @@
+﻿@model List<OrdineViewModel>
+
+<h1>I miei ordini</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID Ordine</th>
+            <th>Data Ordine</th>
+            <th>Totale</th>
+            <th>Dettagli</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ordine in Model)
+        {
+            <tr>
+                <td>@ordine.Id</td>
+                <td>@ordine.DataOrdine.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@ordine.Totale €</td>
+                <td>
+                    <a class="btn btn-info" href="@Url.Action("DettagliOrdine", "Carrello", new { id = ordine.Id })">Dettagli</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

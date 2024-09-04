@@ -195,4 +195,69 @@ public class CarrelloController : Controller
         // Visualizza una vista di errore
         return View();
     }
+
+
+    // Metodo per visualizzare gli ordini del compratore
+    public async Task<IActionResult> ImieiOrdini()
+    {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var email = User.Identity.Name;
+        var compratore = await _context.Compratori
+                                       .FirstOrDefaultAsync(c => c.Email == email);
+
+        if (compratore == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var ordini = await _context.Ordini
+                                   .Where(o => o.CompratoreId == compratore.Id)
+                                   .OrderByDescending(o => o.DataOrdine)
+                                   .ToListAsync();
+
+        var model = ordini.Select(o => new OrdineViewModel
+        {
+            Id = (int)o.Id,
+            DataOrdine = (DateTime)o.DataOrdine,
+            Totale = (int)o.Totale
+        }).ToList();
+
+        return View(model);
+    }
+
+    // Metodo per visualizzare i dettagli di un ordine specifico
+    public async Task<IActionResult> DettagliOrdine(int id)
+    {
+        var ordine = await _context.Ordini
+                                   .Include(o => o.OrdineArticoli)
+                                   .ThenInclude(oa => oa.Articolo)
+                                   .FirstOrDefaultAsync(o => o.Id == id);
+
+        if (ordine == null)
+        {
+            return NotFound();
+        }
+
+        var model = new OrdineDettagliViewModel
+        {
+            Id = (int)ordine.Id,
+            DataOrdine = (DateTime)ordine.DataOrdine,
+            Totale = (int)ordine.Totale,
+            Articoli = ordine.OrdineArticoli.Select(oa => new ArticoloDettagliViewModel
+            {
+                Titolo = oa.Articolo.Titolo,
+                Prezzo = oa.Articolo.Prezzo ?? 0,
+                Quantità = (int)oa.Quantità
+            }).ToList()
+        };
+
+        return View(model);
+    }
+
+
+
 }

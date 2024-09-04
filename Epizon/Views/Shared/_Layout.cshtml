@@ -35,6 +35,9 @@
                                     Il mio profilo
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Carrello" asp-action="IMieiOrdini">I miei ordini</a>
+                            </li>
                             @if (User.IsInRole("Rivenditore"))
                             {
                                 <li class="nav-item">
