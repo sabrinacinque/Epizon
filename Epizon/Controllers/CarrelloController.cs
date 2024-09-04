@@ -59,7 +59,8 @@ public class CarrelloController : Controller
                 Rivenditore = new RivenditoreViewModel
                 {
                     RagioneSociale = a.Rivenditore.RagioneSociale
-                }
+                },
+                Quantità = 1 // Imposta la quantità di default a 1
             })
             .FirstOrDefaultAsync();
 
@@ -69,13 +70,27 @@ public class CarrelloController : Controller
         }
 
         var carrello = RecuperaCarrello();
-        carrello.Add(articolo);
+
+        // Controlla se l'articolo è già nel carrello
+        var articoloEsistente = carrello.FirstOrDefault(a => a.Id == id);
+        if (articoloEsistente != null)
+        {
+            // Incrementa la quantità
+            articoloEsistente.Quantità += 1;
+        }
+        else
+        {
+            // Aggiungi nuovo articolo al carrello
+            carrello.Add(articolo);
+        }
+
         HttpContext.Session.SetString("Carrello", JsonConvert.SerializeObject(carrello));
 
-        int numeroProdottiNelCarrello = carrello.Count;
+        int numeroProdottiNelCarrello = carrello.Sum(a => (int)a.Quantità); // Conta la quantità totale
 
         return Json(new { success = true, numeroProdottiNelCarrello });
     }
+
 
     public async Task<IActionResult> Checkout()
     {
@@ -111,14 +126,11 @@ public class CarrelloController : Controller
     {
         try
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
+            // Ottieni l'email dell'utente autenticato
             var email = User.Identity.Name;
-            var compratore = await _context.Compratori
-                                           .FirstOrDefaultAsync(c => c.Email == email);
+
+            // Trova il compratore in base all'email
+            var compratore = await _context.Compratori.FirstOrDefaultAsync(c => c.Email == email);
 
             if (compratore == null)
             {
@@ -134,37 +146,22 @@ public class CarrelloController : Controller
 
             var nuovoOrdine = new Ordine
             {
-                CompratoreId = compratore.Id,
+                CompratoreId = compratore.Id, // Usa l'ID del compratore autenticato
                 DataOrdine = DateTime.Now,
                 Totale = articoli.Sum(a => a.Prezzo * a.Quantità),
-                OrdineArticoli = new List<OrdineArticolo>()
+                OrdineArticoli = articoli.Select(a => new OrdineArticolo
+                {
+                    ArticoloId = a.Id,
+                    Quantità = (int)a.Quantità
+                }).ToList()
             };
 
             _context.Ordini.Add(nuovoOrdine);
             await _context.SaveChangesAsync();
 
-            foreach (var articolo in articoli)
-            {
-                var ordineArticolo = new OrdineArticolo
-                {
-                    OrdineId = (int)nuovoOrdine.Id,
-                    ArticoloId = articolo.Id,
-                    Quantità = (int)articolo.Quantità
-                };
-
-                _context.OrdineArticoli.Add(ordineArticolo);
-            }
-
-            await _context.SaveChangesAsync();
-
             HttpContext.Session.Remove("Carrello");
 
-            return RedirectToAction("OrdineConfermato", new { ordineId = nuovoOrdine.Id });
-        }
-        catch (DbUpdateException dbEx)
-        {
-            _logger.LogError(dbEx, "Errore durante il salvataggio dell'ordine: {Message}", dbEx.Message);
-            return View("ErroreDuranteOrdine");
+            return RedirectToAction("OrdineConfermato", new { ordiniIds = nuovoOrdine.Id });
         }
         catch (Exception ex)
         {
@@ -172,6 +169,8 @@ public class CarrelloController : Controller
             return View("ErroreDuranteOrdine");
         }
     }
+
+
 
 
     public async Task<IActionResult> OrdineConfermato(string ordiniIds)
