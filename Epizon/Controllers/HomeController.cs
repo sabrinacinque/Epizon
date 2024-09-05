@@ -61,6 +61,11 @@ namespace Epizon.Controllers
             return View(articoli);
         }
 
+
+        public IActionResult HomeRivenditore()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
@@ -79,4 +84,6 @@ namespace Epizon.Controllers
         public string Nome { get; set; }
         public string ImmagineUrl { get; set; }
     }
+
+ 
 }

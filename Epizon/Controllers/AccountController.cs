@@ -201,7 +201,8 @@ namespace Epizon.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity));
 
-                    return RedirectToAction("Index", "Articoli");
+                    // Redirect to the HomeRivenditore view
+                    return RedirectToAction("HomeRivenditore", "Home");
                 }
 
                 ModelState.AddModelError(string.Empty, "Tentativo di login non valido.");
@@ -209,6 +210,7 @@ namespace Epizon.Controllers
 
             return View(model);
         }
+
 
 
         private string HashPassword(string password)
