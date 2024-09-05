@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Epizon.Models.OrdineRicevutoViewModel>
+
+@{
+    ViewData["Title"] = "Ordini Ricevuti";
+}
+
+<h1>Ordini Ricevuti</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Data Ordine</th>
+            <th>Articolo</th>
+            <th>Quantità</th>
+            <th>Prezzo Totale</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DataOrdine</td>
+                <td>@item.ArticoloTitolo</td>
+                <td>@item.QuantitàOrdinata</td>
+
+            </tr>
+        }
+    </tbody>
+</table>

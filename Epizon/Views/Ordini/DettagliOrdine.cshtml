@@ -1,0 +1,61 @@
+﻿@model Epizon.Models.OrdineArticolo
+
+@{
+    ViewData["Title"] = "Dettagli Ordine";
+}
+
+<h1>Dettagli Ordine</h1>
+
+<div>
+    <h4>Cliente</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Nome Cliente
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Ordine.Compratore.Nome
+        </dd>
+        <dt class="col-sm-2">
+            Email Cliente
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Ordine.Compratore.Email
+        </dd>
+        <dt class="col-sm-2">
+            Indirizzo Spedizione
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Ordine.Compratore.Indirizzo
+        </dd>
+        <dt class="col-sm-2">
+            Numero di Telefono
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Ordine.Compratore.Telefono
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <h4>Articolo da Spedire</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Titolo Articolo
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Articolo.Titolo
+        </dd>
+        <dt class="col-sm-2">
+            Quantità
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Quantità
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="OrdiniRicevuti">Torna agli Ordini Ricevuti</a>
+</div>
