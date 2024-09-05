@@ -6,7 +6,9 @@
 
 <h1>Modifica Profilo Rivenditore</h1>
 
-<form asp-action="ModificaProfilo">
+<form asp-action="ModificaProfilo" method="post">
+    <input type="hidden" asp-for="Id" /> <!-- Campo nascosto per l'Id -->
+
     <div class="form-group">
         <label asp-for="RagioneSociale" class="control-label"></label>
         <input asp-for="RagioneSociale" class="form-control" />

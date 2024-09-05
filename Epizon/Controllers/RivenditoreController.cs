@@ -54,16 +54,40 @@ public class RivenditoreController : Controller
     }
 
     // POST: Rivenditore/ModificaProfilo
+    [Route("Rivenditore/ModificaProfilo")]
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ModificaProfilo([Bind("Id,RagioneSociale,Nome,Cognome,PartitaIva,Indirizzo,Citta,CAP,Provincia,Telefono,Pec,CodiceDestinatario")] Rivenditore rivenditore)
     {
         if (ModelState.IsValid)
         {
             try
             {
-                _context.Update(rivenditore);
+                var existingRivenditore = await _context.Rivenditori.FindAsync(rivenditore.Id);
+                if (existingRivenditore == null)
+                {
+                    return NotFound();
+                }
+
+                // Update the fields
+                existingRivenditore.RagioneSociale = rivenditore.RagioneSociale;
+                existingRivenditore.Nome = rivenditore.Nome;
+                existingRivenditore.Cognome = rivenditore.Cognome;
+                existingRivenditore.PartitaIva = rivenditore.PartitaIva;
+                existingRivenditore.Indirizzo = rivenditore.Indirizzo;
+                existingRivenditore.Citta = rivenditore.Citta;
+                existingRivenditore.CAP = rivenditore.CAP;
+                existingRivenditore.Provincia = rivenditore.Provincia;
+                existingRivenditore.Telefono = rivenditore.Telefono;
+                existingRivenditore.Pec = rivenditore.Pec;
+                existingRivenditore.CodiceDestinatario = rivenditore.CodiceDestinatario;
+
+                // Save changes
+                _context.Update(existingRivenditore);
                 await _context.SaveChangesAsync();
+
+                // Redirect to the correct action
+                return RedirectToAction("Profilo");
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -76,13 +100,16 @@ public class RivenditoreController : Controller
                     throw;
                 }
             }
-            return RedirectToAction(nameof(Profilo));
         }
         return View(rivenditore);
     }
+
 
     private bool RivenditoreExists(int id)
     {
         return _context.Rivenditori.Any(e => e.Id == id);
     }
 }
+
+   
+
