@@ -3,6 +3,7 @@
     // Models/OrdineRicevutoViewModel.cs
     public class OrdineRicevutoViewModel
     {
+        public int OrdineId { get; set; } // Aggiungi questa proprietà
         public DateTime? DataOrdine { get; set; }
         public string ArticoloTitolo { get; set; }
         public string ArticoloDescrizione { get; set; }

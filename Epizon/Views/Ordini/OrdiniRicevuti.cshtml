@@ -12,7 +12,6 @@
             <th>Data Ordine</th>
             <th>Articolo</th>
             <th>Quantità</th>
-            <th>Prezzo Totale</th>
             <th>Azioni</th>
         </tr>
     </thead>
@@ -23,7 +22,9 @@
                 <td>@item.DataOrdine</td>
                 <td>@item.ArticoloTitolo</td>
                 <td>@item.QuantitàOrdinata</td>
-
+                <td>
+                    <a asp-action="DettagliOrdine" asp-route-id="@item.OrdineId">Visualizza Dettagli</a>
+                </td>
             </tr>
         }
     </tbody>

@@ -35,6 +35,7 @@ public class OrdiniController : Controller
             .Where(oa => oa.Articolo.RivenditoreId == rivenditoreId)
             .Select(oa => new OrdineRicevutoViewModel
             {
+                OrdineId = (int)oa.Ordine.Id, // Assicurati di usare la proprietà giusta qui
                 DataOrdine = oa.Ordine.DataOrdine,
                 ArticoloTitolo = oa.Articolo.Titolo,
                 ArticoloDescrizione = oa.Articolo.Descrizione,
@@ -56,12 +57,6 @@ public class OrdiniController : Controller
     }
 
 
-
-
-
-
-
-
     // GET: Ordini/DettagliOrdine/5
     public async Task<IActionResult> DettagliOrdine(int? id)
     {
@@ -70,12 +65,12 @@ public class OrdiniController : Controller
             return NotFound();
         }
 
-        int? rivenditoreId = int.Parse(User.Identity.Name); // Conversione anche qui
+        int rivenditoreId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "RivenditoreId")?.Value);
 
         var ordineArticolo = await _context.OrdineArticoli
             .Include(oa => oa.Ordine)
+                .ThenInclude(o => o.Compratore)
             .Include(oa => oa.Articolo)
-            .ThenInclude(a => a.Rivenditore)
             .Where(oa => oa.OrdineId == id && oa.Articolo.RivenditoreId == rivenditoreId)
             .FirstOrDefaultAsync();
 
