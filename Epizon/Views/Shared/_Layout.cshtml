@@ -30,15 +30,17 @@
                                 <span class="nav-link text-dark">Ciao, @User.Identity.Name</span>
                             </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">Il mio profilo</a>
-                            </li>
+                            
 
                             @if (User.IsInRole("Compratore"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Carrello" asp-action="IMieiOrdini">I miei ordini</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">Il mio profilo</a>
+                                </li>
+
                             }
 
                             @if (User.IsInRole("Rivenditore"))
@@ -48,6 +50,9 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Ordini" asp-action="OrdiniRicevuti">Ordini Ricevuti</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Rivenditore" asp-action="Profilo">Profilo Rivenditore</a>
                                 </li>
                             }
 

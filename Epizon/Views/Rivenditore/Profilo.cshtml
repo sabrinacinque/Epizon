@@ -1,0 +1,47 @@
+﻿@model Epizon.Models.Rivenditore
+
+@{
+    ViewData["Title"] = "Profilo Rivenditore";
+}
+
+<h1>Profilo Rivenditore</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <dl class="row">
+            <dt class="col-sm-3">Ragione Sociale</dt>
+            <dd class="col-sm-9">@Model.RagioneSociale</dd>
+
+            <dt class="col-sm-3">Nome</dt>
+            <dd class="col-sm-9">@Model.Nome</dd>
+
+            <dt class="col-sm-3">Cognome</dt>
+            <dd class="col-sm-9">@Model.Cognome</dd>
+
+            <dt class="col-sm-3">Partita IVA</dt>
+            <dd class="col-sm-9">@Model.PartitaIva</dd>
+
+            <dt class="col-sm-3">Indirizzo</dt>
+            <dd class="col-sm-9">@Model.Indirizzo</dd>
+
+            <dt class="col-sm-3">Città</dt>
+            <dd class="col-sm-9">@Model.Citta</dd>
+
+            <dt class="col-sm-3">CAP</dt>
+            <dd class="col-sm-9">@Model.CAP</dd>
+
+            <dt class="col-sm-3">Provincia</dt>
+            <dd class="col-sm-9">@Model.Provincia</dd>
+
+            <dt class="col-sm-3">Telefono</dt>
+            <dd class="col-sm-9">@Model.Telefono</dd>
+
+            <dt class="col-sm-3">PEC</dt>
+            <dd class="col-sm-9">@Model.Pec</dd>
+
+            <dt class="col-sm-3">Codice Destinatario</dt>
+            <dd class="col-sm-9">@Model.CodiceDestinatario</dd>
+        </dl>
+        <a asp-action="ModificaProfilo">Modifica</a>
+    </div>
+</div>
