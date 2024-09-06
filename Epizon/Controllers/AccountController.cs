@@ -145,16 +145,25 @@ namespace Epizon.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Cerca l'utente nel database
                 var user = await _context.Compratori
                     .SingleOrDefaultAsync(u => u.Email == model.Email);
 
-                if (user != null && VerifyPassword(model.Password, user.Password))
+                // Se l'utente non esiste o la password è errata
+                if (user == null || !VerifyPassword(model.Password, user.Password))
                 {
+                    // Aggiungi un messaggio di errore al ModelState
+                    ModelState.AddModelError(string.Empty, "Email o password errati.");
+                }
+                else
+                {
+                    // Crea i claims
                     var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Email),
-                        new Claim(ClaimTypes.Role, user.Ruolo)
-                    };
+            {
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim(ClaimTypes.Role, user.Ruolo),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+            };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -163,12 +172,12 @@ namespace Epizon.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
 
+            // Ritorna alla vista del login con il ModelState che include il messaggio di errore
             return View(model);
         }
+
 
         // GET: /Account/LoginRivenditore
         [HttpGet]
@@ -177,18 +186,25 @@ namespace Epizon.Controllers
             return View();
         }
 
-        // POST: /Account/LoginRivenditore
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginRivenditore(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
+                // Cerca l'utente nel database
                 var user = await _context.Rivenditori
                     .SingleOrDefaultAsync(u => u.Email == model.Email);
 
-                if (user != null && VerifyPassword(model.Password, user.Password))
+                // Se l'utente non esiste o la password è errata
+                if (user == null || !VerifyPassword(model.Password, user.Password))
                 {
+                    // Aggiungi un messaggio di errore al ModelState
+                    ModelState.AddModelError(string.Empty, "Email o password errati.");
+                }
+                else
+                {
+                    // Crea i claims
                     var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Email),
@@ -204,12 +220,12 @@ namespace Epizon.Controllers
                     // Redirect to the HomeRivenditore view
                     return RedirectToAction("HomeRivenditore", "Home");
                 }
-
-                ModelState.AddModelError(string.Empty, "Tentativo di login non valido.");
             }
 
+            // Ritorna alla vista del login con il ModelState che include il messaggio di errore
             return View(model);
         }
+
 
 
 
@@ -253,5 +269,120 @@ namespace Epizon.Controllers
             return View(compratore);
         }
 
+
+        // GET: /Account/EditProfile
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            var email = User.Identity.Name;
+            if (email == null)
+            {
+                return RedirectToAction("LoginCompratore", "Account");
+            }
+
+            var compratore = await _context.Compratori.FirstOrDefaultAsync(c => c.Email == email);
+
+            if (compratore == null)
+            {
+                return NotFound();
+            }
+
+            return View(compratore);
+        }
+
+
+        // POST: /Account/EditProfile
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile([Bind("Id,Nome,Cognome,Indirizzo,Citta,CAP,Provincia,Telefono,Email")] Compratore model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var email = User.Identity.Name;
+            var user = await _context.Compratori.FirstOrDefaultAsync(c => c.Email == email);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Update only the editable fields
+            user.Nome = model.Nome;
+            user.Cognome = model.Cognome;
+            user.Indirizzo = model.Indirizzo;
+            user.Citta = model.Citta;
+            user.CAP = model.CAP;
+            user.Provincia = model.Provincia;
+            user.Telefono = model.Telefono;
+            user.Email = model.Email;
+
+            try
+            {
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                // Handle errors, e.g., duplicate email
+                ModelState.AddModelError("", "Impossibile salvare le modifiche. Riprova.");
+                return View(model);
+            }
+
+            return RedirectToAction("Profile");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> DeleteProfile()
+        {
+            // Ottieni l'ID dell'utente dal claim
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                var claims = User.Claims.Select(c => new { c.Type, c.Value });
+                // Log i claims per verificare cosa è disponibile
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Recupera l'utente dal database
+            var user = await _context.Compratori.FindAsync(int.Parse(userId));
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Elimina l'utente dal database
+            _context.Compratori.Remove(user);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                // Gestione eccezioni, ad esempio, log o messaggio di errore
+                return StatusCode(500, "Errore durante l'eliminazione dell'account.");
+            }
+
+            // Logout l'utente e redirigi alla home page o login
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult LoginOrRegister()
+        {
+            // Logica per la visualizzazione della pagina di login o registrazione
+            return View();
+        }
+
+
     }
+
+
 }
