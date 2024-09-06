@@ -38,13 +38,6 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">Il mio profilo</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@Url.Action("VisualizzaCarrello", "Carrello")">
-                                        <i class="fas fa-shopping-cart"></i>
-                                        Carrello
-                                        <span id="numeroProdottiNelCarrello" class="badge bg-primary">0</span>
-                                    </a>
-                                </li>
                             }
                             else if (User.IsInRole("Rivenditore"))
                             {
@@ -87,6 +80,17 @@
                                     <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="RegisterRivenditore">Registrati come Rivenditore</a></li>
                                     <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="RegisterCompratore">Registrati come Compratore</a></li>
                                 </ul>
+                            </li>
+                        }
+
+                        @if (!User.Identity.IsAuthenticated || User.IsInRole("Compratore"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("VisualizzaCarrello", "Carrello")">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Carrello
+                                    <span id="numeroProdottiNelCarrello" class="badge bg-primary">0</span>
+                                </a>
                             </li>
                         }
                     </ul>

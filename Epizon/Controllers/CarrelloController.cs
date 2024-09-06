@@ -35,6 +35,10 @@ public class CarrelloController : Controller
         return View(carrelloViewModel);
     }
 
+    public IActionResult LoginOrRegister()
+    {
+        return View();
+    }
     private List<ArticoloViewModel> RecuperaCarrello()
     {
         var carrelloJson = HttpContext.Session.GetString("Carrello");
