@@ -334,52 +334,51 @@ namespace Epizon.Controllers
             return RedirectToAction("Profile");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> DeleteProfile()
-        {
-            // Ottieni l'ID dell'utente dal claim
-
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                var claims = User.Claims.Select(c => new { c.Type, c.Value });
-                // Log i claims per verificare cosa è disponibile
-                return RedirectToAction("Index", "Home");
-            }
-
-            // Recupera l'utente dal database
-            var user = await _context.Compratori.FindAsync(int.Parse(userId));
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            // Elimina l'utente dal database
-            _context.Compratori.Remove(user);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                // Gestione eccezioni, ad esempio, log o messaggio di errore
-                return StatusCode(500, "Errore durante l'eliminazione dell'account.");
-            }
-
-            // Logout l'utente e redirigi alla home page o login
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            return RedirectToAction("Index", "Home");
-        }
 
         public IActionResult LoginOrRegister()
         {
             // Logica per la visualizzazione della pagina di login o registrazione
             return View();
         }
+
+
+        public async Task<IActionResult> DisattivaAccount()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Ottieni l'ID dell'utente dal claim
+            if (userId == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var utente = await _context.Compratori.FindAsync(int.Parse(userId));
+            if (utente == null)
+            {
+                return NotFound();
+            }
+
+            // Imposta email e password su null per disattivare l'account
+            utente.Email = null;
+            utente.Password = null;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                // Esegui il logout dell'utente e reindirizzalo alla home page
+                await HttpContext.SignOutAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            catch (DbUpdateException ex)
+            {
+                // Gestisci eventuali errori durante il salvataggio delle modifiche
+                ModelState.AddModelError("", "Errore durante la disattivazione dell'account. " + ex.Message);
+                return View("Error");
+            }
+        }
+
+
+
+
 
 
     }

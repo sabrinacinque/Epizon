@@ -14,6 +14,7 @@ namespace Epizon.Data
         public DbSet<Compratore> Compratori { get; set; }
         public DbSet<Rivenditore> Rivenditori { get; set; }
         public DbSet<OrdineArticolo> OrdineArticoli { get; set; }
+  
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
