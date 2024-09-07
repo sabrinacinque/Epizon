@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <Folder Include="sqlQuery\" />
-    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

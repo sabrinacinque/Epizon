@@ -34,8 +34,8 @@ namespace Epizon.Controllers
                 new CategoriaViewModel { Nome = "Libri e lettura", ImmagineUrl = "libri.jpg" },
                 new CategoriaViewModel { Nome = "Giochi, bambini e prima infanzia", ImmagineUrl = "giochi.jpg" },
                 new CategoriaViewModel { Nome = "Auto e moto", ImmagineUrl = "auto.jpg" },
-                new CategoriaViewModel { Nome = "Ufficio e professionisti", ImmagineUrl = "ufficio.jpg" },
-                new CategoriaViewModel { Nome = "Sport", ImmagineUrl = "sport.jpg" }
+                new CategoriaViewModel { Nome = "Ufficio e professionisti", ImmagineUrl = "ufficio.jpeg" },
+                new CategoriaViewModel { Nome = "Sport", ImmagineUrl = "sport.jpeg" }
             };
 
             return View(categorie);
