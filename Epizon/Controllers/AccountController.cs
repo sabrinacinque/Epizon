@@ -85,9 +85,6 @@ namespace Epizon.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Aggiungi un breakpoint qui o usa il logging per verificare i dati
-                System.Diagnostics.Debug.WriteLine($"Email: {model.Email}");
-
                 var user = new Rivenditore
                 {
                     Email = model.Email,
@@ -108,28 +105,19 @@ namespace Epizon.Controllers
                 // Hash the password before saving it
                 user.Password = HashPassword(model.Password);
 
-
-
                 _context.Rivenditori.Add(user);
                 await _context.SaveChangesAsync();
 
-                // Sign in the user
-                var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Ruolo)
-        };
+                // Set a success message in TempData
+                TempData["SuccessMessage"] = "Registrazione avvenuta con successo. Puoi effettuare il login in questa pagina";
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity));
-
-                return RedirectToAction("Index", "Home");
+                // Redirect to the login page
+                return RedirectToAction("LoginRivenditore", "Account");
             }
 
             return View(model);
         }
+
 
         // GET: /Account/LoginCompratore
         [HttpGet]

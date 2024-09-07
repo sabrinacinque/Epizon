@@ -1,13 +1,18 @@
 ﻿
 
-SELECT * FROM categorie;
+
 USE Epizon;
 SELECT * FROM Articoli;
+
 SELECT * FROM Utente;
+
+delete from Utente where id=42;
+
 SELECT * FROM Ordini;
-Delete from Articoli where id =3;
+
+
 SELECT * FROM OrdineArticoli;
-Delete from utente where id = 10;
+DELETE FROM OrdineArticoli;
 DROP table Articoli;
 DROP table _EFMigrationsHistory;
 DROP table Categorie;
@@ -61,3 +66,19 @@ JOIN
 WHERE 
     a.RivenditoreId = 9;
 
+
+    DELETE FROM nome_tabella;
+
+
+INSERT INTO [dbo].[Utente] 
+    ([Email], [Password], [Ruolo], [RagioneSociale], [Nome], [Cognome], [PartitaIva], [Indirizzo], [Citta], [CAP], [Provincia], [Telefono], [Pec], [CodiceDestinatario])
+VALUES 
+    ('rivenditore2@gmail.com', 'password', 'Rivenditore', 'Rivenditore Due SRL', 'Luigi', 'Verdi', '12345678902', 'Via Rivenditore 2', 'Milano', '20100', 'MI', '0987654321', 'pec2@example.com', 'ABCDE02'),
+    ('rivenditore3@gmail.com', 'password', 'Rivenditore', 'Rivenditore Tre SRL', 'Giovanni', 'Bianchi', '12345678903', 'Via Rivenditore 3', 'Napoli', '80100', 'NA', '1122334455', 'pec3@example.com', 'ABCDE03'),
+    ('rivenditore4@gmail.com', 'password', 'Rivenditore', 'Rivenditore Quattro SRL', 'Carlo', 'Gialli', '12345678904', 'Via Rivenditore 4', 'Torino', '10100', 'TO', '5566778899', 'pec4@example.com', 'ABCDE04'),
+    ('rivenditore5@gmail.com', 'password', 'Rivenditore', 'Rivenditore Cinque SRL', 'Andrea', 'Azzurri', '12345678905', 'Via Rivenditore 5', 'Firenze', '50100', 'FI', '6677889900', 'pec5@example.com', 'ABCDE05'),
+    ('rivenditore6@gmail.com', 'password', 'Rivenditore', 'Rivenditore Sei SRL', 'Roberto', 'Neri', '12345678906', 'Via Rivenditore 6', 'Bologna', '40100', 'BO', '7788990011', 'pec6@example.com', 'ABCDE06'),
+    ('rivenditore7@gmail.com', 'password', 'Rivenditore', 'Rivenditore Sette SRL', 'Francesco', 'Viola', '12345678907', 'Via Rivenditore 7', 'Genova', '16100', 'GE', '8899001122', 'pec7@example.com', 'ABCDE07'),
+    ('rivenditore8@gmail.com', 'password', 'Rivenditore', 'Rivenditore Otto SRL', 'Marco', 'Marroni', '12345678908', 'Via Rivenditore 8', 'Palermo', '90100', 'PA', '9900112233', 'pec8@example.com', 'ABCDE08'),
+    ('rivenditore9@gmail.com', 'password', 'Rivenditore', 'Rivenditore Nove SRL', 'Paolo', 'Verdi', '12345678909', 'Via Rivenditore 9', 'Bari', '70100', 'BA', '0011223344', 'pec9@example.com', 'ABCDE09'),
+    ('rivenditore10@gmail.com', 'password', 'Rivenditore', 'Rivenditore Dieci SRL', 'Andrea', 'Bianchi', '12345685909', 'Via Rivenditore 10', 'Caserta', '81030', 'CE', '0011223984', 'pec10@example.com', 'ABCDE10');
