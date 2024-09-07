@@ -209,18 +209,27 @@ namespace Epizon.Controllers
             {
                 try
                 {
-                    // Mantieni l'ID del rivenditore originale
                     var existingArticolo = await _context.Articoli.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
                     if (existingArticolo == null)
                     {
                         return NotFound();
                     }
+
+                    // Mantieni l'ID del rivenditore originale
                     articolo.RivenditoreId = existingArticolo.RivenditoreId;
 
-                    // Salvataggio delle immagini se presenti
-                    articolo.ImmagineCopertina = ImmagineCopertina != null ? await SalvaImmagine(ImmagineCopertina) : articolo.ImmagineCopertina;
-                    articolo.Immagine2 = Immagine2 != null ? await SalvaImmagine(Immagine2) : articolo.Immagine2;
-                    articolo.Immagine3 = Immagine3 != null ? await SalvaImmagine(Immagine3) : articolo.Immagine3;
+                    // Se non è stata caricata una nuova immagine, mantieni quella esistente
+                    articolo.ImmagineCopertina = ImmagineCopertina != null
+                        ? await SalvaImmagine(ImmagineCopertina)
+                        : existingArticolo.ImmagineCopertina;
+
+                    articolo.Immagine2 = Immagine2 != null
+                        ? await SalvaImmagine(Immagine2)
+                        : existingArticolo.Immagine2;
+
+                    articolo.Immagine3 = Immagine3 != null
+                        ? await SalvaImmagine(Immagine3)
+                        : existingArticolo.Immagine3;
 
                     _context.Update(articolo);
                     await _context.SaveChangesAsync();
@@ -239,8 +248,14 @@ namespace Epizon.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // In caso di errore, ripopola le categorie
-            ViewData["Categorie"] = new List<SelectListItem>
+            // Ripopola le categorie in caso di errore
+            ViewData["Categorie"] = GetCategorieSelectList();
+            return View(articolo);
+        }
+
+        private List<SelectListItem> GetCategorieSelectList()
+        {
+            return new List<SelectListItem>
     {
         new SelectListItem { Value = "Alimentari e bevande", Text = "Alimentari e bevande" },
         new SelectListItem { Value = "Farmacia e cura della persona", Text = "Farmacia e cura della persona" },
@@ -255,9 +270,10 @@ namespace Epizon.Controllers
         new SelectListItem { Value = "Ufficio e professionisti", Text = "Ufficio e professionisti" },
         new SelectListItem { Value = "Sport", Text = "Sport" }
     };
-
-            return View(articolo);
         }
+
+
+
 
 
         // GET: Articoli/Delete/5

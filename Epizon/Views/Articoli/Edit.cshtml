@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Modifica</h1>
 
 <h4>Articolo</h4>
 <hr />
@@ -25,11 +25,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="Prezzo" class="control-label"></label>
-                <input asp-for="Prezzo" class="form-control" />
+                <input asp-for="Prezzo" class="form-control" type="number" />
                 <span asp-validation-for="Prezzo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TempiDiSpedizione" class="control-label"></label>
+                <label asp-for="TempiDiSpedizione" class="control-label">Tempi di spedizione(in giorni)</label>
                 <input asp-for="TempiDiSpedizione" class="form-control" />
                 <span asp-validation-for="TempiDiSpedizione" class="text-danger"></span>
             </div>
@@ -38,16 +38,34 @@
                 <select asp-for="Categoria" class="form-control" asp-items="ViewBag.Categorie"></select>
                 <span asp-validation-for="Categoria" class="text-danger"></span>
             </div>
+            @if (Model.ImmagineCopertina != null)
+            {
+                <div class="form-group">
+                    <img src="~/images/@Model.ImmagineCopertina" alt="foto prodotto" style="width:200px;height:200px;" />
+                </div>
+            }
             <div class="form-group">
-                <label asp-for="ImmagineCopertina" class="control-label"></label>
+                <label asp-for="ImmagineCopertina" class="control-label">Immagine Di Copertina</label>
                 <input asp-for="ImmagineCopertina" type="file" class="form-control" />
                 <span asp-validation-for="ImmagineCopertina" class="text-danger"></span>
             </div>
+            @if (Model.Immagine2 != null)
+            {
+                <div class="form-group">
+                    <img src="~/images/@Model.Immagine2" alt="foto prodotto" style="width:200px;height:200px;" />
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="Immagine2" class="control-label"></label>
                 <input asp-for="Immagine2" type="file" class="form-control" />
                 <span asp-validation-for="Immagine2" class="text-danger"></span>
             </div>
+            @if (Model.Immagine3 != null)
+            {
+                <div class="form-group">
+                    <img src="~/images/@Model.Immagine3" alt="foto prodotto" style="width:200px;height:200px;" />
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="Immagine3" class="control-label"></label>
                 <input asp-for="Immagine3" type="file" class="form-control" />
@@ -57,14 +75,17 @@
             <input type="hidden" asp-for="OrdineId" />
             <input type="hidden" asp-for="RivenditoreId" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Salva" class="btn btn-primary" />
             </div>
+            <input type="hidden" asp-for="ImmagineCopertina" value="@Model.ImmagineCopertina" />
+            <input type="hidden" asp-for="Immagine2" value="@Model.Immagine2" />
+            <input type="hidden" asp-for="Immagine3" value="@Model.Immagine3" />
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Ritorna alla lista</a>
 </div>
 
 @section Scripts {

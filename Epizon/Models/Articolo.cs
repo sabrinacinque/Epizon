@@ -15,8 +15,6 @@ namespace Epizon.Models
         [StringLength(1000)]
         public string? Descrizione { get; set; }
 
-        
-        [Column(TypeName = "decimal(18,2)")]
         public decimal? Prezzo { get; set; }
 
         
