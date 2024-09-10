@@ -33,8 +33,5 @@ namespace Epizon.Models
         public int? RivenditoreId { get; set; }
         public virtual Rivenditore? Rivenditore { get; set; }
 
-        // Foreign key per l'ordine
-        public int? OrdineId { get; set; }
-        public virtual Ordine? Ordine { get; set; }
     }
 }

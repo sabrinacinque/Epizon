@@ -4,12 +4,12 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Crea</h1>
+<h1 class="text-center my-5">Crea articolo</h1>
 
-<h4>Articolo</h4>
+
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 mx-auto">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -23,8 +23,8 @@
                 <span asp-validation-for="Descrizione" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Prezzo" class="control-label"></label>
-                <input asp-for="Prezzo" class="form-control" />
+                <label asp-for="Prezzo" class="control-label">Prezzo(€)</label>
+                <input asp-for="Prezzo" class="form-control" type="number" />
                 <span asp-validation-for="Prezzo" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -52,18 +52,17 @@
                 <input asp-for="Immagine3" type="file" class="form-control" />
                 <span asp-validation-for="Immagine3" class="text-danger"></span>
             </div>
-            <!-- OrdineId e RivenditoreId sono nascosti e non accessibili -->
-            <input type="hidden" asp-for="OrdineId" />
+
             <input type="hidden" asp-for="RivenditoreId" />
-            <div class="form-group">
+            <div class="form-group my-5 text-center">
                 <input type="submit" value="Crea" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="my-2 text-center">
+    <a asp-action="Index" >Ritorna alla lista</a>
 </div>
 
 @section Scripts {

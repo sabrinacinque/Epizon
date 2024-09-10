@@ -81,4 +81,47 @@ public class OrdiniController : Controller
 
         return View(ordineArticolo);
     }
+
+
+
+    // GET: Ordini/OrdiniRicevutiOggi
+    [HttpGet]
+    public async Task<IActionResult> OrdiniRicevutiOggi()
+    {
+        var rivenditoreIdClaim = User.Claims.FirstOrDefault(c => c.Type == "RivenditoreId");
+        if (rivenditoreIdClaim == null)
+        {
+            return Unauthorized();
+        }
+
+        var rivenditoreId = int.Parse(rivenditoreIdClaim.Value);
+        var oggi = DateTime.Today;
+
+        var ordiniOggi = await _context.OrdineArticoli
+            .Where(oa => oa.Articolo.RivenditoreId == rivenditoreId && oa.Ordine.DataOrdine >= oggi)
+            .CountAsync(); // Conteggia gli ordini ricevuti oggi
+
+        return Json(ordiniOggi);
+    }
+
+    // GET: Ordini/OrdiniRicevutiUltimaSettimana
+    [HttpGet]
+    public async Task<IActionResult> OrdiniRicevutiUltimaSettimana()
+    {
+        var rivenditoreIdClaim = User.Claims.FirstOrDefault(c => c.Type == "RivenditoreId");
+        if (rivenditoreIdClaim == null)
+        {
+            return Unauthorized();
+        }
+
+        var rivenditoreId = int.Parse(rivenditoreIdClaim.Value);
+        var ultimaSettimana = DateTime.Today.AddDays(-7);
+
+        var ordiniSettimana = await _context.OrdineArticoli
+            .Where(oa => oa.Articolo.RivenditoreId == rivenditoreId && oa.Ordine.DataOrdine >= ultimaSettimana)
+            .CountAsync(); // Conteggia gli ordini ricevuti nell'ultima settimana
+
+        return Json(ordiniSettimana);
+    }
+
 }

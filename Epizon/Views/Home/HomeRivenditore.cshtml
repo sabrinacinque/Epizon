@@ -2,5 +2,61 @@
     ViewData["Title"] = "Home Rivenditore";
 }
 
-<h2>Bentornato Rivenditore</h2>
-<p>Questa è la tua home page.</p>
+<h1 class="text-center">Bentornato @User.Identity.Name</h1>
+
+
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Ordini Ricevuti Oggi</h5>
+                    <p id="ordini-oggi" class="card-text">Caricamento...</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Ordini Ultima Settimana</h5>
+                    <p id="ordini-settimana" class="card-text">Caricamento...</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Ultime News</h5>
+                    <ul id="news-list" class="list-group">
+                        <!-- News Link Dinamici -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Chiamata AJAX per Ordini di Oggi
+    $.getJSON('/Ordini/OrdiniRicevutiOggi', function(data) {
+        $('#ordini-oggi').text(data + " ordini ricevuti oggi");
+    });
+
+    // Chiamata AJAX per Ordini dell'Ultima Settimana
+    $.getJSON('/Ordini/OrdiniRicevutiUltimaSettimana', function(data) {
+        $('#ordini-settimana').text(data + " ordini ricevuti nell'ultima settimana");
+    });
+
+    // Sezione News (Esempio di News con link esterni)
+    var newsLinks = [
+        { title: "Notizia 1", url: "https://example.com/notizia-1" },
+        { title: "Notizia 2", url: "https://example.com/notizia-2" }
+    ];
+
+    // Popolare le news dinamicamente
+    newsLinks.forEach(function(news) {
+        $('#news-list').append('<li class="list-group-item"><a href="' + news.url + '" target="_blank">' + news.title + '</a></li>');
+    });
+</script>

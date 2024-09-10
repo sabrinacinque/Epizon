@@ -35,7 +35,6 @@ namespace Epizon.Controllers
 
             // Filtra gli articoli per il rivenditore loggato
             var articoli = _context.Articoli
-                .Include(a => a.Ordine)
                 .Include(a => a.Rivenditore)
                 .Where(a => a.RivenditoreId == rivenditoreId);
 
@@ -72,7 +71,6 @@ namespace Epizon.Controllers
             }
 
             var articolo = await _context.Articoli
-                .Include(a => a.Ordine)
                 .Include(a => a.Rivenditore)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (articolo == null)
@@ -172,7 +170,6 @@ namespace Epizon.Controllers
                 return NotFound();
             }
 
-            ViewData["OrdineId"] = new SelectList(_context.Ordini, "Id", "Id", articolo.OrdineId);
             ViewData["RivenditoreId"] = new SelectList(_context.Rivenditori, "Id", "Email", articolo.RivenditoreId);
 
             // Aggiunta delle categorie predefinite
@@ -285,7 +282,6 @@ namespace Epizon.Controllers
             }
 
             var articolo = await _context.Articoli
-                .Include(a => a.Ordine)
                 .Include(a => a.Rivenditore)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (articolo == null)

@@ -4,19 +4,22 @@
     ViewData["Title"] = ViewData["Categoria"] + " - Articoli";
 }
 
-<h1>@ViewData["Categoria"]</h1>
+<h1 class="my-5 text-center" style="color:#992FA6;font-size:70px">@ViewData["Categoria"]</h1>
 
 <div class="container">
     <div class="row">
         @foreach (var articolo in Model)
         {
-            <div class="col-md-3">
-                <div class="card mb-4">
-                    <img src="~/images/@articolo.ImmagineCopertina" class="card-img-top" alt="@articolo.Titolo">
-                    <div class="card-body">
-                        <h5 class="card-title">@articolo.Titolo</h5>
-                        <p class="card-text">@articolo.Prezzo</p>
-                        <a href="@Url.Action("DettaglioArticolo", "Shop", new { id = articolo.Id })" class="btn btn-primary">Dettagli</a>
+            <div class="col-12 col-md-4 my-5">
+                <div class="card my-5 h-100 p-2" style="border:2px solid #992FA6">
+                    <a href="@Url.Action("DettaglioArticolo", "Shop", new { id = articolo.Id })" class="text-decoration-none">
+                        <img src="~/images/@articolo.ImmagineCopertina" class="card-img-top m-auto" alt="@articolo.Titolo" style="height: 350px;width:cover;">
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <a href="@Url.Action("DettaglioArticolo", "Shop", new { id = articolo.Id })" class="text-decoration-underline text-dark">
+                            <h5 class="card-title">@articolo.Titolo</h5>
+                        </a>
+                        <h4 class="card-text mt-auto">@articolo.Prezzo €</h4>
                     </div>
                 </div>
             </div>

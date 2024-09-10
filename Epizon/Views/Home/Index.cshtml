@@ -4,14 +4,14 @@
     ViewData["Title"] = "Home";
 }
 
-<h1 class="text-center my-5">Che cosa vuoi comprare?</h1>
+<h1 class="text-center my-5" style="color:#992FA6;font-size:100px">Che cosa vuoi comprare?</h1>
 
 <div class="container">
     <div class="row">
         @foreach (var categoria in Model)
         {
-            <div class="col-md-3">
-                <div class="card mb-4">
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="card mb-5" style="border:2px solid #992FA6">
                     <a href="@Url.Action("Categoria", "Home", new { categoria = categoria.Nome })">
                         <img src="~/images/categorie/@categoria.ImmagineUrl" class="card-img-top" alt="@categoria.Nome" style="height: 300px; object-fit: cover; width: 100%;">
                         <div class="card-body text-center">
