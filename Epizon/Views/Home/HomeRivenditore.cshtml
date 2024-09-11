@@ -2,38 +2,43 @@
     ViewData["Title"] = "Home Rivenditore";
 }
 
-<h1 class="text-center">Bentornato @User.Identity.Name</h1>
+<h1 class="text-center my-5" style="color:#992FA6">Bentornato @User.Identity.Name</h1>
 
 
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Ordini Ricevuti Oggi</h5>
-                    <p id="ordini-oggi" class="card-text">Caricamento...</p>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12 my-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Ordini Ricevuti Oggi</h5>
+                            <p id="ordini-oggi" class="card-text">Caricamento...</p>
+                        </div>
+                    </div>
                 </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Ordini Ultima Settimana</h5>
+                            <p id="ordini-settimana" class="card-text">Caricamento...</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="offset-1 col-md-5">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Ordini Ultima Settimana</h5>
-                    <p id="ordini-settimana" class="card-text">Caricamento...</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Ultime News</h5>
+                    <h3 class="card-title text-center my-5">Forum per rivenditori</h3>
                     <ul id="news-list" class="list-group">
                         <!-- News Link Dinamici -->
                     </ul>
                 </div>
             </div>
-        </div>
+        </div>  
     </div>
 </div>
 
@@ -51,12 +56,15 @@
 
     // Sezione News (Esempio di News con link esterni)
     var newsLinks = [
-        { title: "Notizia 1", url: "https://example.com/notizia-1" },
-        { title: "Notizia 2", url: "https://example.com/notizia-2" }
+        { title: "Fornitori Dropshipping Italia – Elenco aggiornato 2024 - Stack WP", url: "https://2022.netcommforum.it/ita/" },
+        { title: "Conferenze sull’Ecommerce in Europa a cui partecipare nel 2024", url: "https://www.ecommerceitalia.info/news/conferenze-sullecommerce-in-europa-a-cui-partecipare-nel-2024/" },
+        { title: "Come ottenere recensioni su Amazon e migliorare il feedback sul venditore", url: "https://blog.marketrock.it/come-ottenere-recensioni-su-amazon-e-migliorare-il-feedback-sul-venditore" },
+        { title: "Tutto ciò che serve per il vostro account Amazon Vendor", url: "https://epinium.com/it/software-per-vendere-su-amazon/amazon-vendor/?utm_source=bing&utm_medium=cpc&utm_campaign=vendortool_it&utm_term=amazon%20vendor&utm_campaign=IT+-+Seller&utm_source=bing&utm_medium=ppc&hsa_acc=5377285081&hsa_cam=20118889154&hsa_grp=1348003785364944&hsa_ad=&hsa_src=o&hsa_tgt=kwd-84251394688627:loc-93&hsa_kw=amazon%20vendor&hsa_mt=p&hsa_net=adwords&hsa_ver=3&msclkid=b658bb31f8561add2311ddd0091f9eff&utm_content=Vendor" },
+        { title: "Dove trovare il fornitore per i tuoi prodotti da vendere su Amazon", url: "https://www.scuolaecommerce.com/dove-trovare-il-fornitore-per-i-tuoi-prodotti-da-vendere-su-amazon/" }
     ];
 
     // Popolare le news dinamicamente
     newsLinks.forEach(function(news) {
-        $('#news-list').append('<li class="list-group-item"><a href="' + news.url + '" target="_blank">' + news.title + '</a></li>');
+        $('#news-list').append('<li class="list-group-item my-3"><a href="' + news.url + '" target="_blank">' + news.title + '</a></li>');
     });
 </script>

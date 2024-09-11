@@ -4,48 +4,50 @@
     ViewData["Title"] = "Profilo Rivenditore";
 }
 
-<h1>Profilo Rivenditore</h1>
+<h1 class="text-center my-5" style="color:#992FA6">Profilo Rivenditore</h1>
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="offset-2 col-8 py-5" style="border:1px solid black;">
         <dl class="row">
-            <dt class="col-sm-3">Ragione Sociale</dt>
-            <dd class="col-sm-9">@Model.RagioneSociale</dd>
+            <dt class="col-sm-6 text-center">Ragione Sociale</dt>
+            <dd class="col-sm-6 text-center">@Model.RagioneSociale</dd>
 
-            <dt class="col-sm-3">Nome</dt>
-            <dd class="col-sm-9">@Model.Nome</dd>
+            <dt class="col-sm-6 text-center">Nome</dt>
+            <dd class="col-sm-6 text-center">@Model.Nome</dd>
 
-            <dt class="col-sm-3">Cognome</dt>
-            <dd class="col-sm-9">@Model.Cognome</dd>
+            <dt class="col-sm-6 text-center">Cognome</dt>
+            <dd class="col-sm-6 text-center">@Model.Cognome</dd>
 
-            <dt class="col-sm-3">Partita IVA</dt>
-            <dd class="col-sm-9">@Model.PartitaIva</dd>
+            <dt class="col-sm-6 text-center">Partita IVA</dt>
+            <dd class="col-sm-6 text-center">@Model.PartitaIva</dd>
 
-            <dt class="col-sm-3">Indirizzo</dt>
-            <dd class="col-sm-9">@Model.Indirizzo</dd>
+            <dt class="col-sm-6 text-center">Indirizzo</dt>
+            <dd class="col-sm-6 text-center">@Model.Indirizzo</dd>
 
-            <dt class="col-sm-3">Città</dt>
-            <dd class="col-sm-9">@Model.Citta</dd>
+            <dt class="col-sm-6 text-center">Città</dt>
+            <dd class="col-sm-6 text-center">@Model.Citta</dd>
 
-            <dt class="col-sm-3">CAP</dt>
-            <dd class="col-sm-9">@Model.CAP</dd>
+            <dt class="col-sm-6 text-center">CAP</dt>
+            <dd class="col-sm-6 text-center">@Model.CAP</dd>
 
-            <dt class="col-sm-3">Provincia</dt>
-            <dd class="col-sm-9">@Model.Provincia</dd>
+            <dt class="col-sm-6 text-center">Provincia</dt>
+            <dd class="col-sm-6 text-center">@Model.Provincia</dd>
 
-            <dt class="col-sm-3">Telefono</dt>
-            <dd class="col-sm-9">@Model.Telefono</dd>
+            <dt class="col-sm-6 text-center">Telefono</dt>
+            <dd class="col-sm-6 text-center">@Model.Telefono</dd>
 
-            <dt class="col-sm-3">PEC</dt>
-            <dd class="col-sm-9">@Model.Pec</dd>
+            <dt class="col-sm-6 text-center">PEC</dt>
+            <dd class="col-sm-6 text-center">@Model.Pec</dd>
 
-            <dt class="col-sm-3">Codice Destinatario</dt>
-            <dd class="col-sm-9">@Model.CodiceDestinatario</dd>
+            <dt class="col-sm-6 text-center">Codice Destinatario</dt>
+            <dd class="col-sm-6 text-center">@Model.CodiceDestinatario</dd>
         </dl>
-        <a asp-action="ModificaProfilo" class="btn btn-primary">Modifica</a>
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivateAccountModal">
-            Disattiva Account
-        </button>
+        <div class="text-center mt-5">
+            <a asp-action="ModificaProfilo" class="btn btn-warning mx-2">Modifica</a>
+            <button type="button" class="btn btn-danger my-3" data-bs-toggle="modal" data-bs-target="#deactivateAccountModal">
+                Disattiva Account
+            </button>
+        </div>
     </div>
 </div>
 

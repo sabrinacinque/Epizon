@@ -12,9 +12,9 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" style="background-color:#008296;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="@GetHomeUrl()"><img src="~/images/epizon.jpeg" alt="logo epizon" style="height: 70px;" /></a>
+                <a class="navbar-brand" href="@GetHomeUrl()"><img src="~/images/epizon2.png" alt="logo epizon" style="height: 70px;" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -24,61 +24,61 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <span class="nav-link text-dark">Ciao, @User.Identity.Name</span>
+                                <span class="nav-link text-white">Ciao, @User.Identity.Name</span>
                             </li>
 
                             @if (User.IsInRole("Compratore"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Carrello" asp-action="IMieiOrdini">I miei ordini</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Carrello" asp-action="IMieiOrdini">I miei ordini</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">Il mio profilo</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Account" asp-action="Profile">Il mio profilo</a>
                                 </li>
                             }
                             else if (User.IsInRole("Rivenditore"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="HomeRivenditore">Home</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="HomeRivenditore">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Articoli" asp-action="Index">Articoli</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Articoli" asp-action="Index">Articoli</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Ordini" asp-action="OrdiniRicevuti">Ordini Ricevuti</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Ordini" asp-action="OrdiniRicevuti">Ordini Ricevuti</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Rivenditore" asp-action="Profilo">Profilo Rivenditore</a>
+                                    <a class="nav-link text-white" asp-controller="Rivenditore" asp-action="Profilo">Profilo Rivenditore</a>
                                 </li>
                             }
 
                             <li class="nav-item">
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
-                                    <button type="submit" class="btn btn-link nav-link">Logout</button>
+                                    <button type="submit" class="btn btn-link nav-link text-white">Logout</button>
                                 </form>
                             </li>
                         }
                         else
                         {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <li class="nav-item dropdown" style="background-color:#008296;">
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Accedi
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="loginDropdown">
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LoginRivenditore">Accedi come Rivenditore</a></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LoginCompratore">Accedi come Compratore</a></li>
+                                <ul class="dropdown-menu" aria-labelledby="loginDropdown" style="background-color:#008296;">
+                                    <li><a class="dropdown-item text-white" asp-area="" asp-controller="Account" asp-action="LoginRivenditore">Accedi come Rivenditore</a></li>
+                                    <li><a class="dropdown-item text-white" asp-area="" asp-controller="Account" asp-action="LoginCompratore">Accedi come Compratore</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="registerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <li class="nav-item dropdown" style="background-color:#008296;">
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="registerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Registrati
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="registerDropdown">
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="RegisterRivenditore">Registrati come Rivenditore</a></li>
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="RegisterCompratore">Registrati come Compratore</a></li>
+                                <ul class="dropdown-menu" aria-labelledby="registerDropdown" style="background-color:#008296;">
+                                    <li><a class="dropdown-item text-white" asp-area="" asp-controller="Account" asp-action="RegisterRivenditore">Registrati come Rivenditore</a></li>
+                                    <li><a class="dropdown-item text-white" asp-area="" asp-controller="Account" asp-action="RegisterCompratore">Registrati come Compratore</a></li>
                                 </ul>
                             </li>
                         }
@@ -86,10 +86,10 @@
                         @if (!User.Identity.IsAuthenticated || User.IsInRole("Compratore"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" href="@Url.Action("VisualizzaCarrello", "Carrello")">
-                                    <i class="fas fa-shopping-cart"></i>
+                                <a class="nav-link text-white" href="@Url.Action("VisualizzaCarrello", "Carrello")">
+                                    <i class="fas fa-shopping-cart text-white"></i>
                                     Carrello
-                                    <span id="numeroProdottiNelCarrello" class="badge bg-primary">0</span>
+                                    <span id="numeroProdottiNelCarrello" class="badge bg-primary text-white">0</span>
                                 </a>
                             </li>
                         }
