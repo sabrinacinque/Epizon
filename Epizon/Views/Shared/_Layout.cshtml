@@ -9,6 +9,17 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Epizon.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <style>
+      
+
+        .dropdown-item{
+            color:white;
+        }
+        .dropdown-item:hover{
+            color: #008296;
+            font-weight:300px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -68,8 +79,8 @@
                                     Accedi
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="loginDropdown" style="background-color:#008296;">
-                                    <li><a class="dropdown-item text-white" asp-area="" asp-controller="Account" asp-action="LoginRivenditore">Accedi come Rivenditore</a></li>
-                                    <li><a class="dropdown-item text-white" asp-area="" asp-controller="Account" asp-action="LoginCompratore">Accedi come Compratore</a></li>
+                                    <li><a class="dropdown-item " asp-area="" asp-controller="Account" asp-action="LoginRivenditore">Accedi come Rivenditore</a></li>
+                                    <li><a class="dropdown-item " asp-area="" asp-controller="Account" asp-action="LoginCompratore">Accedi come Compratore</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown" style="background-color:#008296;">
@@ -77,8 +88,8 @@
                                     Registrati
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="registerDropdown" style="background-color:#008296;">
-                                    <li><a class="dropdown-item text-white" asp-area="" asp-controller="Account" asp-action="RegisterRivenditore">Registrati come Rivenditore</a></li>
-                                    <li><a class="dropdown-item text-white" asp-area="" asp-controller="Account" asp-action="RegisterCompratore">Registrati come Compratore</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="RegisterRivenditore">Registrati come Rivenditore</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="RegisterCompratore">Registrati come Compratore</a></li>
                                 </ul>
                             </li>
                         }
@@ -91,6 +102,12 @@
                                     Carrello
                                     <span id="numeroProdottiNelCarrello" class="badge bg-primary text-white">0</span>
                                 </a>
+                            </li>
+                            <li class="nav-item mx-5 flex-grow-1">
+                                <form class="d-flex w-100" asp-action="Cerca" asp-controller="Shop" method="get">
+                                    <input class="form-control me-2 flex-grow-1" type="search" name="query" placeholder="Cerca qualsiasi cosa..." aria-label="Search" />
+                                    <button class="btn btn-outline-light" type="submit">Cerca</button>
+                                </form>
                             </li>
                         }
                     </ul>
