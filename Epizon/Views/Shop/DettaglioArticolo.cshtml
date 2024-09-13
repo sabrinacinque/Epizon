@@ -1,26 +1,101 @@
 ﻿@model ArticoloViewModel
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <img src="~/images/@Model.ImmagineCopertina" alt="@Model.Titolo" class="img-fluid">
+
+<div class="container my-5">
+    <div class="row my-5 d-flex justify-content-center align-items-center">
+        <!-- Colonna con l'immagine principale e le miniature -->
+        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
+            <!-- Immagine principale -->
+            <img id="mainImage" src="~/images/@Model.ImmagineCopertina" alt="@Model.Titolo" style="height: 300px;width:cover;" />
+
+            <!-- Miniature sotto l'immagine principale -->
+            <div class="row mt-4 d-flex justify-content-center">
+                <div class="col-md-3 d-flex justify-content-center">
+                    <img src="~/images/@Model.ImmagineCopertina" alt="@Model.Titolo" class="img-thumbnail thumbnail-image" style="cursor: pointer; height: 100px; width: auto;">
+                </div>
+                <div class="col-md-3 d-flex justify-content-center">
+                    <img src="~/images/@Model.Immagine2" alt="@Model.Titolo" class="img-thumbnail thumbnail-image" style="cursor: pointer; height: 100px; width: auto;">
+                </div>
+                <div class="col-md-3 d-flex justify-content-center">
+                    <img src="~/images/@Model.Immagine3" alt="@Model.Titolo" class="img-thumbnail thumbnail-image" style="cursor: pointer; height: 100px; width: auto;">
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <h1>@Model.Titolo</h1>
-            <p class="text-muted">@Model.Prezzo €</p>
+
+        <!-- Colonna con i dettagli -->
+        <div class="col-md-6 my-5">
+            <h1 style="color:#992FA6;">@Model.Titolo</h1>
+            <h2 class="text-muted">@Model.Prezzo €</h2>
             <form id="aggiungiForm" method="post">
                 <input type="hidden" name="id" value="@Model.Id" />
-                <button type="button" class="aggiungi-al-carrello" data-id="@Model.Id">Aggiungi al carrello</button>
+                <button type="button" class="btn btn-success aggiungi-al-carrello" data-id="@Model.Id">Aggiungi al carrello</button>
             </form>
             <hr />
             <p>@Model.Descrizione</p>
             @if (Model.Rivenditore != null)
             {
                 <p><strong>Rivenditore:</strong> @Model.Rivenditore.RagioneSociale</p>
+                <p><strong>Spedizione garantita: </strong> EPIZON.IT</p>
+                <p><strong>Garanzia cliente: </strong> dalla A alla Z</p>
             }
         </div>
     </div>
+    </div>
+
+    <!-- Carosello articoli correlati -->
+    <div class="row mt-5">
+        <h1 class="text-center my-5" style="color:#992FA6;">Articoli correlati</h1>
+        <div id="caroselloArticoliCorrelati" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner text-center">
+                
+                @for (int i = 0; i < Model.ArticoliCorrelati.Count(); i += 2) // Mostra 2 articoli per ogni slide
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="row justify-content-center">
+                            
+                            @foreach (var articolo in Model.ArticoliCorrelati.Skip(i).Take(2)) // Mostra 2 articoli alla volta
+                            {
+                                <div class="col-md-3 mx-5" style="border:2px solid #992FA6">
+                                   
+                                    <div class="card mb-4 shadow-sm">
+                                        <img src="~/images/@articolo.ImmagineCopertina" class="card-img-top" alt="@articolo.Titolo" style="height: 200px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@articolo.Titolo</h5>
+                                            <p class="card-text">@articolo.Prezzo €</p>
+                                            <a href="@Url.Action("DettaglioArticolo", "Shop", new { id = articolo.Id })" class="btn btn-primary">Vedi Dettagli</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- Controlli del carosello -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#caroselloArticoliCorrelati" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#caroselloArticoliCorrelati" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+
 </div>
+
+<!-- Stile personalizzato per frecce -->
+<style>
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: #992FA6; /* Cambia il colore delle frecce in nero */
+        border-radius: 50%; /* Arrotonda i bordi per una forma più elegante */
+        width: 40px;
+        height: 40px;
+    }
+</style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -44,6 +119,14 @@
                     alert("Si è verificato un errore durante l'aggiunta del prodotto al carrello.");
                 }
             });
+        });
+    });
+
+    $(document).ready(function () {
+        // Cambia l'immagine grande quando una miniatura viene cliccata
+        $(".thumbnail-image").on("click", function () {
+            var newSrc = $(this).attr("src");
+            $("#mainImage").attr("src", newSrc);
         });
     });
 </script>

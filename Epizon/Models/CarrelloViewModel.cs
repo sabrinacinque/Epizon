@@ -32,6 +32,8 @@ public class ArticoloViewModel
     public string Categoria { get; set; }
     public int? RivenditoreId { get; set; }
     public RivenditoreViewModel Rivenditore { get; set; }
+    public List<ArticoloViewModel> ArticoliCorrelati { get; set; }
+
 }
 
 
