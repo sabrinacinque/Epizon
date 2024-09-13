@@ -1,4 +1,4 @@
-﻿@model List<OrdineViewModel>
+﻿@model List<Ordine>
 
 <h1>I miei ordini</h1>
 
@@ -16,7 +16,7 @@
         {
             <tr>
                 <td>@ordine.Id</td>
-                <td>@ordine.DataOrdine.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@ordine.DataOrdine</td>
                 <td>@ordine.Totale €</td>
                 <td>
                     <a class="btn btn-info" href="@Url.Action("DettagliOrdine", "Carrello", new { id = ordine.Id })">Dettagli</a>

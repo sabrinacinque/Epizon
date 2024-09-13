@@ -263,7 +263,6 @@ public class CarrelloController : Controller
         return View();
     }
 
-    // Metodo per visualizzare gli ordini del compratore
     public async Task<IActionResult> ImieiOrdini()
     {
         if (!User.Identity.IsAuthenticated)
@@ -285,8 +284,40 @@ public class CarrelloController : Controller
             .ThenInclude(oa => oa.Articolo)
             .ToListAsync();
 
-        return View(ordini);
+        return View(ordini); // Assicurati che questo modello corrisponda al modello della vista
     }
+
+
+    public async Task<IActionResult> DettagliOrdine(int id)
+    {
+        var ordine = await _context.Ordini
+            .Include(o => o.OrdineArticoli)
+            .ThenInclude(oa => oa.Articolo)
+            .FirstOrDefaultAsync(o => o.Id == id);
+
+        if (ordine == null)
+        {
+            return NotFound();
+        }
+
+        // Verifica se le proprietà nullable hanno un valore prima di usarle
+        var model = new OrdineDettagliViewModel
+        {
+            Id = (int)ordine.Id, // Non è nullable, quindi il cast non è necessario
+            DataOrdine = ordine.DataOrdine.HasValue ? ordine.DataOrdine.Value : DateTime.MinValue,
+            Totale = ordine.Totale.HasValue ? ordine.Totale.Value : 0m,
+            Articoli = ordine.OrdineArticoli.Select(oa => new ArticoloDettagliViewModel
+            {
+                Titolo = oa.Articolo.Titolo,
+                Prezzo = oa.Prezzo.HasValue ? oa.Prezzo.Value : 0m,
+                Quantità = oa.Quantità.HasValue ? oa.Quantità.Value : 0
+            }).ToList()
+        };
+
+        return View(model);
+    }
+
+
 
     // Metodo per rimuovere un articolo dal carrello
     [HttpPost]
