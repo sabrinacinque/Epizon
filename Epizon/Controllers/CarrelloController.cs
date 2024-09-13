@@ -24,7 +24,7 @@ public class CarrelloController : Controller
     public IActionResult VisualizzaCarrello()
     {
         var articoli = RecuperaCarrello();
-        var totale = articoli.Sum(a => a.Prezzo);
+        var totale = articoli.Sum(a => a.Prezzo * a.Quantità);
 
         var carrelloViewModel = new CarrelloViewModel
         {
@@ -39,6 +39,7 @@ public class CarrelloController : Controller
     {
         return View();
     }
+
     private List<ArticoloViewModel> RecuperaCarrello()
     {
         var carrelloJson = HttpContext.Session.GetString("Carrello");
@@ -90,30 +91,100 @@ public class CarrelloController : Controller
 
         HttpContext.Session.SetString("Carrello", JsonConvert.SerializeObject(carrello));
 
-        int numeroProdottiNelCarrello = carrello.Sum(a => (int)a.Quantità); // Conta la quantità totale
+        int numeroProdottiNelCarrello = carrello.Sum(a => a.Quantità); // Conta la quantità totale
 
         return Json(new { success = true, numeroProdottiNelCarrello });
     }
 
-
-    public async Task<IActionResult> Checkout()
+    [HttpPost]
+    public IActionResult AggiornaQuantita(List<ArticoloViewModel> articoli)
     {
+        var carrello = RecuperaCarrello();
+
+        // Aggiorna le quantità degli articoli nel carrello
+        foreach (var articolo in articoli)
+        {
+            var articoloEsistente = carrello.FirstOrDefault(a => a.Id == articolo.Id);
+            if (articoloEsistente != null)
+            {
+                articoloEsistente.Quantità = articolo.Quantità;
+            }
+        }
+
+        // Calcola il totale aggiornato
+        var totale = carrello.Sum(a => a.Prezzo * a.Quantità);
+
+        // Salva di nuovo il carrello nella sessione
+        HttpContext.Session.SetString("Carrello", JsonConvert.SerializeObject(carrello));
+
+        // Redirect alla pagina di checkout
+        return RedirectToAction("Checkout");
+    }
+
+    [HttpGet]
+    public IActionResult Checkout()
+    {
+        // Recupera il carrello dalla sessione
+        var carrelloJson = HttpContext.Session.GetString("Carrello");
+        var carrelloViewModel = JsonConvert.DeserializeObject<CarrelloViewModel>(carrelloJson);
+
+        // Assicurati che il compratore sia impostato
+        if (carrelloViewModel.Compratore == null)
+        {
+            // Potresti voler redirigere a una pagina di errore o impostare un compratore predefinito
+            return RedirectToAction("Error", "Home");
+        }
+
+        return View(carrelloViewModel);
+    }
+
+    private async Task<Compratore> RecuperaCompratore()
+    {
+        // Verifica che l'utente sia autenticato
         if (!User.Identity.IsAuthenticated)
         {
-            return RedirectToAction("LoginOrRegister", "Carrello");
+            return null; // Se l'utente non è autenticato, restituisci null
         }
 
+        // Ottieni l'email dell'utente autenticato
         var email = User.Identity.Name;
-        var compratore = await _context.Compratori
-                                       .FirstOrDefaultAsync(c => c.Email == email);
 
+        // Cerca il compratore nel database utilizzando l'email
+        var compratore = await _context.Compratori.FirstOrDefaultAsync(c => c.Email == email);
+
+        return compratore; // Restituisci il compratore o null se non trovato
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Checkout(Dictionary<int, int> Quantita)
+    {
+        var articoli = RecuperaCarrello();  // Recupera gli articoli dal carrello
+
+        if (articoli == null || !articoli.Any())
+        {
+            ModelState.AddModelError("", "Il carrello è vuoto.");
+            return RedirectToAction("VisualizzaCarrello");
+        }
+
+        // Aggiorna le quantità degli articoli
+        foreach (var articolo in articoli)
+        {
+            if (Quantita.ContainsKey(articolo.Id))
+            {
+                articolo.Quantità = Quantita[articolo.Id];
+            }
+        }
+
+        // Calcola il totale
+        var totale = articoli.Sum(a => a.Prezzo * a.Quantità);
+
+        // Recupera i dettagli del compratore
+        var compratore = await RecuperaCompratore();
         if (compratore == null)
         {
-            return RedirectToAction("LoginOrRegister", "Carrello");
+            ModelState.AddModelError("", "Compratore non trovato.");
+            return RedirectToAction("Login", "Account");
         }
-
-        var articoli = RecuperaCarrello();
-        var totale = articoli.Sum(a => a.Prezzo);
 
         var carrelloViewModel = new CarrelloViewModel
         {
@@ -122,75 +193,67 @@ public class CarrelloController : Controller
             Compratore = compratore
         };
 
-        return View(carrelloViewModel);
+        return View("Checkout", carrelloViewModel);
     }
 
-    [HttpPost]
     public async Task<IActionResult> ConfermaOrdine()
     {
-        try
+        // Ottieni gli articoli dal carrello
+        var carrelloArticoli = RecuperaCarrello();
+
+        if (carrelloArticoli == null || !carrelloArticoli.Any())
         {
-            // Ottieni l'email dell'utente autenticato
-            var email = User.Identity.Name;
-
-            // Trova il compratore in base all'email
-            var compratore = await _context.Compratori.FirstOrDefaultAsync(c => c.Email == email);
-
-            if (compratore == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var articoli = RecuperaCarrello();
-
-            if (articoli == null || !articoli.Any())
-            {
-                return RedirectToAction("VisualizzaCarrello");
-            }
-
-            var nuovoOrdine = new Ordine
-            {
-                CompratoreId = compratore.Id, // Usa l'ID del compratore autenticato
-                DataOrdine = DateTime.Now,
-                Totale = articoli.Sum(a => a.Prezzo * a.Quantità),
-                OrdineArticoli = articoli.Select(a => new OrdineArticolo
-                {
-                    ArticoloId = a.Id,
-                    Quantità = (int)a.Quantità
-                }).ToList()
-            };
-
-            _context.Ordini.Add(nuovoOrdine);
-            await _context.SaveChangesAsync();
-
-            HttpContext.Session.Remove("Carrello");
-
-            return RedirectToAction("OrdineConfermato", new { ordiniIds = nuovoOrdine.Id });
+            // Nessun articolo nel carrello
+            return RedirectToAction("VisualizzaCarrello");
         }
-        catch (Exception ex)
+
+        // Crea un nuovo ordine
+        var ordine = new Ordine
         {
-            _logger.LogError(ex, "Errore generale durante il salvataggio dell'ordine: {Message}", ex.Message);
-            return View("ErroreDuranteOrdine");
-        }
+            DataOrdine = DateTime.Now,
+            Totale = carrelloArticoli.Sum(a => a.Prezzo * a.Quantità),
+            OrdineArticoli = carrelloArticoli.Select(a => new OrdineArticolo
+            {
+                ArticoloId = a.Id,
+                Quantità = a.Quantità,
+                Prezzo = a.Prezzo
+            }).ToList()
+        };
+
+        // Salva l'ordine nel database
+        _context.Ordini.Add(ordine);
+        await _context.SaveChangesAsync();
+
+        // Pulisci il carrello
+        HttpContext.Session.Remove("Carrello");
+
+        return View("OrdineConfermato", new List<Ordine> { ordine });
     }
 
-
-
-
-    public async Task<IActionResult> OrdineConfermato(string ordiniIds)
+    public async Task<IActionResult> OrdineConfermato(int ordiniIds)
     {
-        if (string.IsNullOrEmpty(ordiniIds))
+        if (ordiniIds == 0)
         {
             return RedirectToAction("VisualizzaCarrello");
         }
 
-        var ordiniIdsList = ordiniIds.Split(',').Select(int.Parse).ToList();
-        var ordini = await _context.Ordini
-                                   .Include(o => o.Compratore)
-                                   .Where(o => ordiniIdsList.Contains((int)o.Id))
-                                   .ToListAsync();
+        // Recupera l'ordine dal database usando l'ID
+        var ordine = await _context.Ordini
+                                   .Include(o => o.OrdineArticoli)
+                                   .ThenInclude(oa => oa.Articolo)
+                                   .FirstOrDefaultAsync(o => o.Id == ordiniIds);
 
-        return View(ordini);
+        if (ordine == null)
+        {
+            return NotFound();
+        }
+
+        var model = new List<Ordine>
+        {
+            ordine
+        };
+
+        return View(model);
     }
 
     // Puoi aggiungere un metodo per gestire errori durante l'ordine se necessario.
@@ -199,7 +262,6 @@ public class CarrelloController : Controller
         // Visualizza una vista di errore
         return View();
     }
-
 
     // Metodo per visualizzare gli ordini del compratore
     public async Task<IActionResult> ImieiOrdini()
@@ -210,58 +272,43 @@ public class CarrelloController : Controller
         }
 
         var email = User.Identity.Name;
-        var compratore = await _context.Compratori
-                                       .FirstOrDefaultAsync(c => c.Email == email);
+        var compratore = await _context.Compratori.FirstOrDefaultAsync(c => c.Email == email);
 
         if (compratore == null)
         {
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Errore", "Home");
         }
 
         var ordini = await _context.Ordini
-                                   .Where(o => o.CompratoreId == compratore.Id)
-                                   .OrderByDescending(o => o.DataOrdine)
-                                   .ToListAsync();
+            .Where(o => o.CompratoreId == compratore.Id)
+            .Include(o => o.OrdineArticoli)
+            .ThenInclude(oa => oa.Articolo)
+            .ToListAsync();
 
-        var model = ordini.Select(o => new OrdineViewModel
-        {
-            Id = (int)o.Id,
-            DataOrdine = (DateTime)o.DataOrdine,
-            Totale = (int)o.Totale
-        }).ToList();
-
-        return View(model);
+        return View(ordini);
     }
 
-    // Metodo per visualizzare i dettagli di un ordine specifico
-    public async Task<IActionResult> DettagliOrdine(int id)
+    // Metodo per rimuovere un articolo dal carrello
+    [HttpPost]
+    public IActionResult RimuoviArticolo(int id)
     {
-        var ordine = await _context.Ordini
-                                   .Include(o => o.OrdineArticoli)
-                                   .ThenInclude(oa => oa.Articolo)
-                                   .FirstOrDefaultAsync(o => o.Id == id);
+        var carrello = RecuperaCarrello();
 
-        if (ordine == null)
+        var articolo = carrello.FirstOrDefault(a => a.Id == id);
+        if (articolo != null)
         {
-            return NotFound();
+            carrello.Remove(articolo);
+            HttpContext.Session.SetString("Carrello", JsonConvert.SerializeObject(carrello));
         }
 
-        var model = new OrdineDettagliViewModel
-        {
-            Id = (int)ordine.Id,
-            DataOrdine = (DateTime)ordine.DataOrdine,
-            Totale = (int)ordine.Totale,
-            Articoli = ordine.OrdineArticoli.Select(oa => new ArticoloDettagliViewModel
-            {
-                Titolo = oa.Articolo.Titolo,
-                Prezzo = oa.Articolo.Prezzo ?? 0,
-                Quantità = (int)oa.Quantità
-            }).ToList()
-        };
-
-        return View(model);
+        return RedirectToAction("VisualizzaCarrello");
     }
 
-
-
+    // Metodo per svuotare il carrello
+    [HttpPost]
+    public IActionResult SvuotaCarrello()
+    {
+        HttpContext.Session.Remove("Carrello");
+        return RedirectToAction("VisualizzaCarrello");
+    }
 }

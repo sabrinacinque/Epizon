@@ -21,6 +21,8 @@ namespace Epizon.Models
         public virtual Compratore? Compratore { get; set; }
 
         // Relazione con gli articoli acquistati in questo ordine
-        public virtual ICollection<OrdineArticolo>? OrdineArticoli { get; set; }
+        public ICollection<OrdineArticolo> OrdineArticoli { get; set; } = new List<OrdineArticolo>();
+
+
     }
 }

@@ -8,6 +8,7 @@
         public int OrdineId { get; set; }
         public Ordine? Ordine { get; set; }
 
+        public decimal ? Prezzo { get; set; }    
         public int ArticoloId { get; set; }
         public Articolo? Articolo { get; set; }
 
