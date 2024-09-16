@@ -19,26 +19,38 @@ namespace Epizon.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             // Elenco delle categorie
             var categorie = new List<CategoriaViewModel>
+    {
+        new CategoriaViewModel { Nome = "Alimentari e bevande", ImmagineUrl = "alimentari.jpg" },
+        new CategoriaViewModel { Nome = "Farmacia e cura della persona", ImmagineUrl = "farmacia.jpg" },
+        new CategoriaViewModel { Nome = "Animali domestici", ImmagineUrl = "animali.jpg" },
+        new CategoriaViewModel { Nome = "Moda e bellezza", ImmagineUrl = "moda.jpg" },
+        new CategoriaViewModel { Nome = "Casa", ImmagineUrl = "casa.jpg" },
+        new CategoriaViewModel { Nome = "Dispositivi ed elettronica", ImmagineUrl = "elettronica.jpg" },
+        new CategoriaViewModel { Nome = "Musica, video e giochi", ImmagineUrl = "musica.jpg" },
+        new CategoriaViewModel { Nome = "Libri e lettura", ImmagineUrl = "libri.jpg" },
+        new CategoriaViewModel { Nome = "Giochi, bambini e prima infanzia", ImmagineUrl = "giochi.jpg" },
+        new CategoriaViewModel { Nome = "Auto e moto", ImmagineUrl = "auto.jpg" },
+        new CategoriaViewModel { Nome = "Ufficio e professionisti", ImmagineUrl = "ufficio.jpeg" },
+        new CategoriaViewModel { Nome = "Sport", ImmagineUrl = "sport.jpeg" }
+    };
+
+            // Seleziona 5 articoli casuali
+            var articoliCasuali = await _context.Articoli
+                .OrderBy(a => Guid.NewGuid()) // Ordina casualmente gli articoli
+                .Take(20) // Prendi i primi 5 articoli casuali
+                .ToListAsync();
+
+            var viewModel = new HomeViewModel
             {
-                new CategoriaViewModel { Nome = "Alimentari e bevande", ImmagineUrl = "alimentari.jpg" },
-                new CategoriaViewModel { Nome = "Farmacia e cura della persona", ImmagineUrl = "farmacia.jpg" },
-                new CategoriaViewModel { Nome = "Animali domestici", ImmagineUrl = "animali.jpg" },
-                new CategoriaViewModel { Nome = "Moda e bellezza", ImmagineUrl = "moda.jpg" },
-                new CategoriaViewModel { Nome = "Casa", ImmagineUrl = "casa.jpg" },
-                new CategoriaViewModel { Nome = "Dispositivi ed elettronica", ImmagineUrl = "elettronica.jpg" },
-                new CategoriaViewModel { Nome = "Musica, video e giochi", ImmagineUrl = "musica.jpg" },
-                new CategoriaViewModel { Nome = "Libri e lettura", ImmagineUrl = "libri.jpg" },
-                new CategoriaViewModel { Nome = "Giochi, bambini e prima infanzia", ImmagineUrl = "giochi.jpg" },
-                new CategoriaViewModel { Nome = "Auto e moto", ImmagineUrl = "auto.jpg" },
-                new CategoriaViewModel { Nome = "Ufficio e professionisti", ImmagineUrl = "ufficio.jpeg" },
-                new CategoriaViewModel { Nome = "Sport", ImmagineUrl = "sport.jpeg" }
+                Categorie = categorie,
+                ArticoliCasuali = articoliCasuali
             };
 
-            return View(categorie);
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Categoria(string categoria)
@@ -85,5 +97,12 @@ namespace Epizon.Controllers
         public string ImmagineUrl { get; set; }
     }
 
- 
+    // ViewModel per rappresentare le categorie e gli articoli casuali
+    public class HomeViewModel
+    {
+        public List<CategoriaViewModel> Categorie { get; set; }
+        public List<Articolo> ArticoliCasuali { get; set; }
+    }
+
+
 }
