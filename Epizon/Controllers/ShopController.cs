@@ -40,6 +40,8 @@ public class ShopController : Controller
             Id = articolo.Id,
             Titolo = articolo.Titolo,
             ImmagineCopertina = articolo.ImmagineCopertina,
+            Immagine2 = articolo.Immagine2,
+            Immagine3 = articolo.Immagine3,
             Prezzo = articolo.Prezzo ?? 0m,
             Descrizione = articolo.Descrizione,
             RivenditoreId = articolo.RivenditoreId,
@@ -53,7 +55,9 @@ public class ShopController : Controller
                 Id = a.Id,
                 Titolo = a.Titolo,
                 Prezzo = a.Prezzo ?? 0m,
-                ImmagineCopertina = a.ImmagineCopertina
+                ImmagineCopertina = a.ImmagineCopertina,
+                Immagine2 = a.Immagine2,
+                Immagine3 = a.Immagine3
             }).ToList()
         };
 
