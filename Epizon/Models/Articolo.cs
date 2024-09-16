@@ -32,6 +32,6 @@ namespace Epizon.Models
         // Foreign key per il rivenditore
         public int? RivenditoreId { get; set; }
         public virtual Rivenditore? Rivenditore { get; set; }
-
+     
     }
 }

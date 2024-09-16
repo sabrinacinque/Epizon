@@ -14,7 +14,7 @@ delete from Ordini where id=8;
 
 SELECT * FROM OrdineArticoli;
 
-
+SELECT * FROM OrdineArticoli;
 
 
 

@@ -158,6 +158,12 @@ public class CarrelloController : Controller
     [HttpPost]
     public async Task<IActionResult> Checkout(Dictionary<int, int> Quantita)
     {
+        // Controlla se l'utente è autenticato
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("LoginOrRegister", "Carrello");
+        }
+
         var articoli = RecuperaCarrello();  // Recupera gli articoli dal carrello
 
         if (articoli == null || !articoli.Any())
@@ -196,6 +202,7 @@ public class CarrelloController : Controller
         return View("Checkout", carrelloViewModel);
     }
 
+    [HttpPost]
     public async Task<IActionResult> ConfermaOrdine()
     {
         // Ottieni gli articoli dal carrello
@@ -207,11 +214,20 @@ public class CarrelloController : Controller
             return RedirectToAction("VisualizzaCarrello");
         }
 
+        // Recupera i dettagli del compratore autenticato
+        var compratore = await RecuperaCompratore();
+        if (compratore == null)
+        {
+            ModelState.AddModelError("", "Compratore non trovato.");
+            return RedirectToAction("Login", "Account");
+        }
+
         // Crea un nuovo ordine
         var ordine = new Ordine
         {
             DataOrdine = DateTime.Now,
             Totale = carrelloArticoli.Sum(a => a.Prezzo * a.Quantità),
+            CompratoreId = compratore.Id, // Associa l'ID del compratore all'ordine
             OrdineArticoli = carrelloArticoli.Select(a => new OrdineArticolo
             {
                 ArticoloId = a.Id,
@@ -229,6 +245,7 @@ public class CarrelloController : Controller
 
         return View("OrdineConfermato", new List<Ordine> { ordine });
     }
+
 
     public async Task<IActionResult> OrdineConfermato(int ordiniIds)
     {
@@ -282,10 +299,12 @@ public class CarrelloController : Controller
             .Where(o => o.CompratoreId == compratore.Id)
             .Include(o => o.OrdineArticoli)
             .ThenInclude(oa => oa.Articolo)
+            .OrderByDescending(o => o.DataOrdine)  // Ordina per data in ordine decrescente
             .ToListAsync();
 
-        return View(ordini); // Assicurati che questo modello corrisponda al modello della vista
+        return View(ordini);
     }
+
 
 
     public async Task<IActionResult> DettagliOrdine(int id)
