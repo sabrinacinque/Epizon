@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Servizio Clienti";
+}
+
+<h2 class="text-center my-5" style="color:#008296;">Servizio Clienti - Assistenza</h2>
+
+<div class="container">
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <form asp-action="InviaRichiesta" method="post">
+        <div class="mb-3">
+            <label for="tipoProblema" class="form-label">Tipo di problema</label>
+            <select class="form-select" id="tipoProblema" name="TipoProblema" required>
+                <option selected disabled>Seleziona un tipo di problema</option>
+                <option value="Tecnico">Problema Tecnico</option>
+                <option value="Amministrativo">Problema Amministrativo</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="numeroTelefono" class="form-label">Numero di Telefono per essere ricontattato</label>
+            <input type="tel" class="form-control" id="numeroTelefono" name="NumeroTelefono" placeholder="Inserisci il tuo numero di telefono" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="testoRichiesta" class="form-label">Descrizione del problema</label>
+            <textarea class="form-control" id="testoRichiesta" name="TestoRichiesta" rows="5" placeholder="Descrivi il tuo problema..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Invia Richiesta</button>
+    </form>
+</div>
