@@ -115,24 +115,26 @@
             </div>
         </nav>
     </header>
-    <main role="main" class="pb-3 my-5">
-        @RenderBody()
-    </main>
-    <footer class="border-top footer text-muted my-5">
-        <div class="container">
+    <div class="container my-5">
+        <main role="main" class="my-5">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="border-top text-muted my-5">
+        <div class="container my-5">
             <div class="row">
                 <div class="col-md-4">
                     <h5>Link Utili</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#">Termini e Condizioni</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">FAQ</a></li>
+                        <li><a asp-controller="Support" asp-action="TerminiECondizioni">Termini e Condizioni</a></li>
+                        <li><a asp-controller="Support" asp-action="PrivacyPolicy">Privacy Policy</a></li>
+                        <li><a asp-controller="Support" asp-action="FAQ">FAQ</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h5>Servizio Clienti</h5>
                     <ul class="list-unstyled">
-                        <li><a asp-controller="Assistenza" asp-action="Index">Problemi Tecnici e Amministrativi</a></li>
+                        <li><a asp-controller="Support" asp-action="ServizioClienti">Problemi Tecnici e Amministrativi</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">

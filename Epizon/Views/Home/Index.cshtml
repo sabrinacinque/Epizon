@@ -31,11 +31,13 @@
 
             <!-- Controlli del carosello -->
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselArticoliCasuali" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="carousel-control-prev-icon" aria-hidden="true"
+                      style="filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(93deg) brightness(0%) contrast(100%);"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#carouselArticoliCasuali" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="carousel-control-next-icon" aria-hidden="true"
+                      style="filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(93deg) brightness(0%) contrast(100%);"></span>
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
@@ -69,7 +71,7 @@
             <div id="carouselArticoliCasuali2" class="carousel slide" data-bs-ride="carousel">
                 <h2 class="text-center my-5" style="color:#992FA6; font-size: 50px;">Offerte del mese</h2>
 
-                <div class="carousel-inner text-center" style="background-color:#992FA6;">
+                <div class="carousel-inner text-center">
                     @for (int i = 0; i < Model.ArticoliCasuali.Count(); i++)
                     {
                         var articolo = Model.ArticoliCasuali[i];
@@ -79,7 +81,10 @@
                                     <img src="~/images/@articolo.ImmagineCopertina" class="card-img-top" alt="@articolo.Titolo" style="height: 300px; object-fit: cover;">
                                     <div class="card-body">
                                         <h5 class="card-title">@articolo.Titolo</h5>
-                                        <p class="card-text">@articolo.Prezzo €</p>
+                                        <s class="text-danger fw-bolder">
+                                            @(((articolo.Prezzo ?? 0) * 1.10m).ToString("F2")) €
+                                        </s>
+                                        <p class="card-text text-success">@articolo.Prezzo €</p>
                                         <a href="@Url.Action("DettaglioArticolo", "Shop", new { id = articolo.Id })" class="btn btn-primary">Vedi Dettagli</a>
                                     </div>
                                 </div>
@@ -90,11 +95,13 @@
 
                 <!-- Controlli del carosello -->
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselArticoliCasuali2" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="carousel-control-prev-icon" aria-hidden="true"
+                          style="filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(93deg) brightness(0%) contrast(100%);"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#carouselArticoliCasuali2" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="carousel-control-next-icon" aria-hidden="true"
+                          style="filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(93deg) brightness(0%) contrast(100%);"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>

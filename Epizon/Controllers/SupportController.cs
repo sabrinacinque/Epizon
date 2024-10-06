@@ -19,5 +19,23 @@ namespace Epizon.Controllers
             TempData["SuccessMessage"] = "La tua richiesta è stata inviata con successo. Verrai ricontattato al più presto.";
             return RedirectToAction("ServizioClienti");
         }
+
+        [HttpGet]
+        public IActionResult TerminiECondizioni()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult PrivacyPolicy()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult FAQ()
+        {
+            return View();
+        }
     }
 }
