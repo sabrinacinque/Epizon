@@ -17,6 +17,20 @@ SELECT * FROM OrdineArticoli;
 SELECT * FROM OrdineArticoli;
 
 
+CREATE TABLE [dbo].[MetodoPagamento] (
+    [Id]                 INT            IDENTITY (1, 1) NOT NULL,
+    [UtenteId]           INT            NOT NULL,  -- Foreign Key
+    [Tipo]               NVARCHAR (50)  NOT NULL,  -- "Carta" o "Conto Bancario"
+    [NomeIntestatario]   NVARCHAR (100) NOT NULL,  -- Nome completo dell'intestatario
+    [NumeroCartaConto]   NVARCHAR (50)  NOT NULL,  -- Numero della carta o IBAN
+    [DataScadenza]       DATE           NULL,      -- Solo per le carte di credito
+    [CodiceSicurezza]    NVARCHAR (3)   NULL,      -- CVV per le carte (3 cifre)
+    [DataInserimento]    DATETIME       DEFAULT GETDATE(),  -- Data di inserimento del metodo di pagamento
+    CONSTRAINT [PK_MetodoPagamento] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_MetodoPagamento_Utente] FOREIGN KEY ([UtenteId]) REFERENCES [dbo].[Utente] ([Id]) ON DELETE CASCADE
+);
+
+
 
 SELECT oa.*
 FROM OrdineArticoli oa
