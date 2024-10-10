@@ -3,6 +3,7 @@
 
 USE Epizon;
 SELECT * FROM Articoli;
+SELECT * FROM MetodoPagamento;
 
 SELECT * FROM Utente;
 
@@ -29,6 +30,19 @@ CREATE TABLE [dbo].[MetodoPagamento] (
     CONSTRAINT [PK_MetodoPagamento] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_MetodoPagamento_Utente] FOREIGN KEY ([UtenteId]) REFERENCES [dbo].[Utente] ([Id]) ON DELETE CASCADE
 );
+
+ALTER TABLE [dbo].[MetodoPagamento]
+    -- Modifica la lunghezza del campo NumeroCartaConto
+    ALTER COLUMN [NumeroCartaConto] NVARCHAR(20) NOT NULL;
+
+-- Aggiungi nuove colonne IBAN e NomeBanca
+ALTER TABLE [dbo].[MetodoPagamento]
+    ADD [IBAN] NVARCHAR(34) NULL,
+        [NomeBanca] NVARCHAR(100) NULL;
+
+-- Modifica la lunghezza del campo CodiceSicurezza
+ALTER TABLE [dbo].[MetodoPagamento]
+    ALTER COLUMN [CodiceSicurezza] NVARCHAR(4) NULL;
 
 
 

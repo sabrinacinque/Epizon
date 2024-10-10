@@ -35,5 +35,8 @@ namespace Epizon.Models
 
         // Relazione con gli ordini effettuati
         public virtual ICollection<Ordine>? OrdiniEffettuati { get; set; }
+        public virtual ICollection<MetodoPagamento>? MetodiPagamento { get; set; }
+
+
     }
 }

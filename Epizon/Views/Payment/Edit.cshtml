@@ -1,0 +1,50 @@
+﻿@model Epizon.Models.MetodoPagamento
+
+@{
+    ViewData["Title"] = "Modifica Metodo di Pagamento";
+}
+
+<h2>Modifica Metodo di Pagamento</h2>
+
+<form asp-action="Edit">
+    <div class="form-group">
+        <label asp-for="Tipo" class="control-label"></label>
+        <input asp-for="Tipo" class="form-control" />
+        <span asp-validation-for="Tipo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NumeroCarta" class="control-label"></label>
+        <input asp-for="NumeroCarta" class="form-control" />
+        <span asp-validation-for="NumeroCarta" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Intestatario" class="control-label"></label>
+        <input asp-for="Intestatario" class="form-control" />
+        <span asp-validation-for="Intestatario" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DataScadenza" class="control-label"></label>
+        <input asp-for="DataScadenza" class="form-control" type="date" />
+        <span asp-validation-for="DataScadenza" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="IBAN" class="control-label"></label>
+        <input asp-for="IBAN" class="form-control" />
+        <span asp-validation-for="IBAN" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NomeBanca" class="control-label"></label>
+        <input asp-for="NomeBanca" class="form-control" />
+        <span asp-validation-for="NomeBanca" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Salva" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Annulla</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

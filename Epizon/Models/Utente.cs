@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Epizon.Models;
+using System.ComponentModel.DataAnnotations;
 
 public abstract class Utente
 {
@@ -13,5 +14,9 @@ public abstract class Utente
 
     // Ruolo dell'utente, usato per differenziare tra Compratore e Rivenditore
     public string? Ruolo { get; set; }
+
+    public virtual ICollection<MetodoPagamento>? MetodiPagamento { get; set; }
+
+
 
 }

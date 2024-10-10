@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Epizon.Models.MetodoPagamento>
+
+@{
+    ViewData["Title"] = "Metodi di Pagamento";
+}
+
+<h2>Metodi di Pagamento</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Numero Carta</th>
+            <th>Intestatario</th>
+            <th>Data di Scadenza</th>
+            <th>IBAN</th>
+            <th>Nome Banca</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var metodo in Model)
+    {
+        <tr>
+            <td>@metodo.Tipo</td>
+            <td>@metodo.NumeroCarta</td>
+            <td>@metodo.Intestatario</td>
+                <td>@(metodo.DataScadenza.HasValue ? metodo.DataScadenza.Value.ToString("MM/yyyy") : "N/A")</td>
+                <td>@metodo.IBAN</td>
+            <td>@metodo.NomeBanca</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@metodo.Id" class="btn btn-secondary">Modifica</a>
+                <a asp-action="Delete" asp-route-id="@metodo.Id" class="btn btn-danger">Elimina</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-primary">Aggiungi Nuovo Metodo di Pagamento</a>
+

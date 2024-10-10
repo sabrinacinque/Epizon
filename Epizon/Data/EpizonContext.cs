@@ -14,7 +14,8 @@ namespace Epizon.Data
         public DbSet<Compratore> Compratori { get; set; }
         public DbSet<Rivenditore> Rivenditori { get; set; }
         public DbSet<OrdineArticolo> OrdineArticoli { get; set; }
-  
+        public DbSet<MetodoPagamento> MetodoPagamento { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +43,12 @@ namespace Epizon.Data
                 .WithMany(r => r.Articoli)
                 .HasForeignKey(a => a.RivenditoreId)
                 .OnDelete(DeleteBehavior.Restrict); // Imposta DeleteBehavior se necessario
+
+            // Configurazione della relazione tra MetodoPagamento e Utente
+            modelBuilder.Entity<MetodoPagamento>()
+                .HasOne(mp => mp.Utente)
+                .WithMany(u => u.MetodiPagamento)
+                .HasForeignKey(mp => mp.UtenteId);
         }
     }
 }
