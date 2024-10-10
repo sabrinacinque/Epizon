@@ -41,7 +41,7 @@ public class MetodoPagamentoController : Controller
     // GET: MetodoPagamento/Create
     public IActionResult Create()
     {
-        return View();
+        return View("~/Views/Payment/Create.cshtml");
     }
 
     // POST: MetodoPagamento/Create
@@ -70,7 +70,7 @@ public class MetodoPagamentoController : Controller
         {
             return NotFound();
         }
-        return View(metodoPagamento);
+        return View("~/Views/Payment/Edit.cshtml");
     }
 
     // POST: MetodoPagamento/Edit/5
@@ -103,7 +103,7 @@ public class MetodoPagamentoController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
-        return View(metodoPagamento);
+        return View("~/Views/Payment/Edit.cshtml");
     }
 
     // GET: MetodoPagamento/Delete/5
