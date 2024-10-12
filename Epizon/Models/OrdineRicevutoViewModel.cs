@@ -17,6 +17,8 @@
         public string CAPCompratore { get; set; }
         public string ProvinciaCompratore { get; set; }
         public string TelefonoCompratore { get; set; }
+        public string Stato { get; set; } // Aggiungi questa proprietà
+
     }
 
 }

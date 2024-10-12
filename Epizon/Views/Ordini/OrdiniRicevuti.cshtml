@@ -12,6 +12,8 @@
             <th>Data Ordine</th>
             <th>Articolo</th>
             <th>Quantità</th>
+            <th>Stato</th> <!-- Aggiungi una colonna per lo stato -->
+            <th>Dettaglio</th>
             <th>Azioni</th>
         </tr>
     </thead>
@@ -22,10 +24,56 @@
                 <td>@item.DataOrdine</td>
                 <td>@item.ArticoloTitolo</td>
                 <td>@item.QuantitàOrdinata</td>
+                <td class="status-cell" data-id="@item.OrdineId">
+                    @if (item.Stato == "Spedito")
+                    {
+                        <span class="text-success">Spedito</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Non Spedito</span>
+                    }
+                </td>
                 <td>
                     <a asp-action="DettagliOrdine" asp-route-id="@item.OrdineId">Visualizza Dettagli</a>
+                </td>
+                <td>
+                    <button class="btn btn-success mark-shipped-button" data-id="@item.OrdineId">
+                        Contrassegna come Spedito
+                    </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.mark-shipped-button').on('click', function () {
+                var ordineId = $(this).data('id');
+                var statusCell = $(this).closest('tr').find('.status-cell');
+
+                // Aggiorna lo stato dell'ordine in locale
+                statusCell.html('<span class="text-success">Spedito</span>');
+                // Salva lo stato nel Local Storage
+                localStorage.setItem('ordine_' + ordineId, 'Spedito');
+                $(this).prop('disabled', true); // Disabilita il pulsante dopo l'azione
+
+                // Nascondi il pulsante dopo aver contrassegnato come spedito
+                $(this).hide(); // Nasconde il pulsante "Contrassegna come Spedito"
+            });
+
+            // Carica lo stato degli ordini dal Local Storage al caricamento della pagina
+            $('tr').each(function () {
+                var ordineId = $(this).find('.status-cell').data('id');
+                var savedStatus = localStorage.getItem('ordine_' + ordineId);
+                if (savedStatus === 'Spedito') {
+                    $(this).find('.status-cell').html('<span class="text-success">Spedito</span>');
+                    $(this).find('.mark-shipped-button').prop('disabled', true).hide(); // Disabilita il pulsante e nascondilo
+                }
+            });
+        });
+    </script>
+}
