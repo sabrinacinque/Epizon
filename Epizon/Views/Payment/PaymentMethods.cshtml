@@ -19,24 +19,26 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var metodo in Model)
-    {
-        <tr>
-            <td>@metodo.Tipo</td>
-            <td>@metodo.NumeroCarta</td>
-            <td>@metodo.Intestatario</td>
+        @foreach (var metodo in Model)
+        {
+            <tr>
+                <td>@metodo.Tipo</td>
+                <td>@metodo.NumeroCarta</td>
+                <td>@metodo.Intestatario</td>
                 <td>@(metodo.DataScadenza.HasValue ? metodo.DataScadenza.Value.ToString("MM/yyyy") : "N/A")</td>
                 <td>@metodo.IBAN</td>
-            <td>@metodo.NomeBanca</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@metodo.Id" class="btn btn-secondary">Modifica</a>
-                <a href="javascript:void(0);" class="btn btn-danger delete-button" data-id="@metodo.Id">Elimina</a>
+                <td>@metodo.NomeBanca</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@metodo.Id" class="btn btn-secondary">Modifica</a>
+                    <a href="javascript:void(0);" class="btn btn-danger delete-button" data-id="@metodo.Id">Elimina</a>
+                    <button class="btn btn-success set-default-button" data-id="@metodo.Id">Imposta come predefinito</button>
                 </td>
-        </tr>
-    }
+            </tr>
+        }
     </tbody>
 </table>
 
+<a href="@Url.Action("Profile", "Account")" class="btn btn-secondary">Torna al Profilo</a>
 <a asp-action="Create" class="btn btn-primary">Aggiungi Nuovo Metodo di Pagamento</a>
 
 <!-- Modale di conferma per l'eliminazione -->
@@ -59,7 +61,6 @@
         </div>
     </div>
 </div>
-
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -96,7 +97,22 @@
                     }
                 });
             });
+
+            // Quando viene cliccato il pulsante "Imposta come predefinito"
+            $('.set-default-button').on('click', function () {
+                // Rimuovi la classe verde da tutte le righe
+                $('tbody tr').removeClass('table-success');
+
+                // Mostra tutti i pulsanti "Imposta come predefinito"
+                $('.set-default-button').show();
+
+                // Aggiungi la classe verde alla riga corrente
+                var currentRow = $(this).closest('tr');
+                currentRow.addClass('table-success');
+
+                // Nascondi il pulsante "Imposta come predefinito" per la riga corrente
+                currentRow.find('.set-default-button').hide();
+            });
         });
     </script>
 }
-

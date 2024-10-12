@@ -12,37 +12,13 @@
         <p class="card-text">Email: @(Model.Email ?? "Email non disponibile")</p>
         <p class="card-text">Indirizzo: @Model.Indirizzo, @Model.Citta, @Model.Provincia, @Model.CAP</p>
         <p class="card-text">Telefono: @Model.Telefono</p>
-
-        <h6>Metodo di pagamento</h6>
-        @if (Model.MetodiPagamento != null && Model.MetodiPagamento.Any())
-        {
-            foreach (var metodo in Model.MetodiPagamento)
-            {
-                <h6>Metodo di pagamento - @metodo.Tipo</h6>
-                if (metodo.Tipo == "Carta")
-                {
-                    <p>Intestatario: @metodo.Intestatario</p>
-                    <p>Numero Carta: @metodo.NumeroCarta</p>
-                    <p>Data di Scadenza: @(metodo.DataScadenza.HasValue ? metodo.DataScadenza.Value.ToString("MM/yyyy") : "N/A")</p>
-                    <p>Codice Sicurezza: @metodo.CodiceSicurezza</p>
-                }
-                else if (metodo.Tipo == "Conto Bancario")
-                {
-                    <p>IBAN: @metodo.IBAN</p>
-                    <p>Nome Banca: @metodo.NomeBanca</p>
-                }
-                <a asp-action="EditPaymentMethod" asp-route-id="@metodo.Id" class="btn btn-secondary">Modifica Metodo di Pagamento</a>
-            }
-        }
-        else
-        {
-            <p>Nessun metodo di pagamento registrato.</p>
-            <a asp-controller="MetodoPagamento" asp-action="Index" class="btn btn-secondary">Gestisci Metodi di Pagamento</a>
-        }
+        <p><a asp-controller="MetodoPagamento" asp-action="Index" class="mb-3">Gestisci Metodi di Pagamento</a></p>
 
 
 
-        <a asp-action="EditProfile" class="btn btn-primary">Modifica Profilo</a>
+        <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("EditProfile")'">
+            Modifica Profilo
+        </button>
 
         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivateAccountModal">
             Disattiva Account
