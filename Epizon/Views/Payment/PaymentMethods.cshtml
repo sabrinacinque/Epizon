@@ -30,12 +30,73 @@
             <td>@metodo.NomeBanca</td>
             <td>
                 <a asp-action="Edit" asp-route-id="@metodo.Id" class="btn btn-secondary">Modifica</a>
-                <a asp-action="Delete" asp-route-id="@metodo.Id" class="btn btn-danger">Elimina</a>
-            </td>
+                <a href="javascript:void(0);" class="btn btn-danger delete-button" data-id="@metodo.Id">Elimina</a>
+                </td>
         </tr>
     }
     </tbody>
 </table>
 
 <a asp-action="Create" class="btn btn-primary">Aggiungi Nuovo Metodo di Pagamento</a>
+
+<!-- Modale di conferma per l'eliminazione -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Conferma Eliminazione</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Sei sicuro di voler eliminare questo metodo di pagamento?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Elimina</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var metodoIdToDelete;
+
+            // Quando viene cliccato il pulsante "Elimina"
+            $('.delete-button').on('click', function () {
+                metodoIdToDelete = $(this).data('id'); // Memorizza l'ID del metodo da eliminare
+                $('#confirmDeleteModal').modal('show'); // Mostra il modale
+            });
+
+            // Quando viene cliccato "Conferma Eliminazione"
+            $('#confirmDeleteButton').on('click', function () {
+                $.ajax({
+                    url: '@Url.Action("DeleteConfirmed", "MetodoPagamento")', // Chiama l'azione per eliminare
+                    type: 'POST',
+                    data: {
+                        id: metodoIdToDelete,
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() // Protezione CSRF
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            // Rimuovi la riga dalla tabella
+                            $('a[data-id="' + metodoIdToDelete + '"]').closest('tr').remove();
+                            $('#confirmDeleteModal').modal('hide'); // Nascondi il modale
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Errore durante l\'eliminazione del metodo di pagamento.');
+                    }
+                });
+            });
+        });
+    </script>
+}
 

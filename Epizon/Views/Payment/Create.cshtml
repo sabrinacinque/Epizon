@@ -9,34 +9,52 @@
 <form asp-action="Create">
     <div class="form-group">
         <label asp-for="Tipo" class="control-label"></label>
-        <input asp-for="Tipo" class="form-control" />
+        <select asp-for="Tipo" class="form-control" id="tipoPagamento">
+            <option value="Carta">Carta</option>
+            <option value="Conto Corrente Bancario">Conto Corrente Bancario</option>
+            <option value="Conto Corrente Postale">Conto Corrente Postale</option>
+        </select>
         <span asp-validation-for="Tipo" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="NumeroCarta" class="control-label"></label>
-        <input asp-for="NumeroCarta" class="form-control" />
-        <span asp-validation-for="NumeroCarta" class="text-danger"></span>
+
+    <!-- Campi per la Carta -->
+    <div id="cartaFields" style="display:none;">
+        <div class="form-group">
+            <label asp-for="NumeroCarta" class="control-label"></label>
+            <input asp-for="NumeroCarta" class="form-control" />
+            <span asp-validation-for="NumeroCarta" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Intestatario" class="control-label"></label>
+            <input asp-for="Intestatario" class="form-control" />
+            <span asp-validation-for="Intestatario" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DataScadenza" class="control-label"></label>
+            <input asp-for="DataScadenza" class="form-control" type="month" />
+            <span asp-validation-for="DataScadenza" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="CVV" class="control-label">CVV</label>
+            <input type="text" class="form-control" id="CVV" name="CVV" />
+            <span class="text-danger" id="CVVError"></span>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Intestatario" class="control-label"></label>
-        <input asp-for="Intestatario" class="form-control" />
-        <span asp-validation-for="Intestatario" class="text-danger"></span>
+
+    <!-- Campi per il Conto Corrente -->
+    <div id="contoFields" style="display:none;">
+        <div class="form-group">
+            <label asp-for="Intestatario" class="control-label"></label>
+            <input asp-for="Intestatario" class="form-control" />
+            <span asp-validation-for="Intestatario" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="IBAN" class="control-label"></label>
+            <input asp-for="IBAN" class="form-control" />
+            <span asp-validation-for="IBAN" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="DataScadenza" class="control-label"></label>
-        <input asp-for="DataScadenza" class="form-control" type="date" />
-        <span asp-validation-for="DataScadenza" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="IBAN" class="control-label"></label>
-        <input asp-for="IBAN" class="form-control" />
-        <span asp-validation-for="IBAN" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="NomeBanca" class="control-label"></label>
-        <input asp-for="NomeBanca" class="form-control" />
-        <span asp-validation-for="NomeBanca" class="text-danger"></span>
-    </div>
+
     <div class="form-group">
         <input type="submit" value="Salva" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Annulla</a>
@@ -44,7 +62,32 @@
 </form>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tipoPagamento = document.getElementById('tipoPagamento');
+            const cartaFields = document.getElementById('cartaFields');
+            const contoFields = document.getElementById('contoFields');
+
+            // Funzione per mostrare/nascondere campi in base alla selezione
+            function toggleFields() {
+                if (tipoPagamento.value === 'Carta') {
+                    cartaFields.style.display = 'block';
+                    contoFields.style.display = 'none';
+                } else if (tipoPagamento.value === 'Conto Corrente Bancario' || tipoPagamento.value === 'Conto Corrente Postale') {
+                    cartaFields.style.display = 'none';
+                    contoFields.style.display = 'block';
+                } else {
+                    cartaFields.style.display = 'none';
+                    contoFields.style.display = 'none';
+                }
+            }
+
+            // Esegui la funzione al caricamento iniziale della pagina
+            toggleFields();
+
+            // Aggiungi un listener per il cambiamento del menu a tendina
+            tipoPagamento.addEventListener('change', toggleFields);
+        });
+    </script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

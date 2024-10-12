@@ -105,31 +105,42 @@ public class MetodoPagamentoController : Controller
         }
         return View("~/Views/Payment/Edit.cshtml");
     }
-
-    // GET: MetodoPagamento/Delete/5
-    public async Task<IActionResult> Delete(int id)
+    // Metodo di eliminazione GET: Mostra la conferma dell'eliminazione
+    [HttpGet]
+    public async Task<IActionResult> Delete(int? id)
     {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
         var metodoPagamento = await _context.MetodoPagamento
-            .Include(mp => mp.Utente)
             .FirstOrDefaultAsync(m => m.Id == id);
+
         if (metodoPagamento == null)
         {
             return NotFound();
         }
 
-        return View(metodoPagamento);
+        return View(metodoPagamento); // Mostra la vista di conferma dell'eliminazione
     }
 
-    // POST: MetodoPagamento/Delete/5
-    [HttpPost, ActionName("Delete")]
+
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var metodoPagamento = await _context.MetodoPagamento.FindAsync(id);
+        if (metodoPagamento == null)
+        {
+            return Json(new { success = false, message = "Metodo di pagamento non trovato." });
+        }
+
         _context.MetodoPagamento.Remove(metodoPagamento);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+        return Json(new { success = true });
     }
+
 
     private bool MetodoPagamentoExists(int id)
     {
